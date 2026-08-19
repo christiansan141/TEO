@@ -1,0 +1,32 @@
+{
+  "id": "tk-termostato-1-rele",
+  "name": "Termoterapia TEO · TK",
+  "short_name": "TEO",
+  "description": "Control por Bluetooth del equipo de termoterapia TEO. El ESP32-C3 regula; la app solo envía órdenes.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "./termostato-1-rele.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#2E2A5C",
+  "theme_color": "#1D71B8",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    {
+      "comment": "Windows y escritorio pintan el icono tal cual: va con esquinas redondeadas.",
+      "src": "./icono-app-redondeado.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "comment": "Android aplica su propia máscara: este debe ir a sangre, sin redondear.",
+      "src": "./icono-app-oscuro.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

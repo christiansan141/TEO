@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Termoterapia TEO">
+  <title>Termoterapia TEO</title>
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2E2A5C"/><stop offset="100%" stop-color="#1B1840"/></linearGradient>
+    <linearGradient id="ck" x1="421.29" y1="375.97" x2="908.96" y2="375.97" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6E9FDD"/><stop offset=".64" stop-color="#8FB8EA"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="114" ry="114" fill="url(#tile)"/>
+  <g transform="translate(61.11 105.12) scale(0.42)">
+    <polygon fill="#FFFFFF" points="246.71 639.26 246.71 143.38 50.36 143.38 50.36 0 622.95 0 622.95 143.38 427.52 143.38 427.52 639.26 246.71 639.26"/>
+    <g transform="translate(-17.54 -56.34)"><polygon fill="url(#ck)" points="908.96 695.6 634.65 339.57 894.35 56.34 696.18 56.34 421.3 351.31 421.3 564.81 515.83 463.52 698.92 695.6 908.96 695.6"/><path fill="#8F93A3" d="M463.23,765.85c-215.43,0-390.07-106.11-390.07-237,0-73.42,55-139,141.21-182.5-97.1,43.11-160.19,112.8-160.19,191.46,0,130.89,174.65,237,390.08,237,94.6,0,181.33-20.46,248.86-54.5-64.47,28.63-143.92,45.54-229.89,45.54"/></g>
+  </g>
+</svg>

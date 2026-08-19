@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Termoterapia TEO · TK</title>
+<meta name="description" content="Control por Bluetooth del equipo de termoterapia TEO. El ESP32-C3 regula; la app solo envía órdenes.">
+<meta name="theme-color" content="#1D71B8">
+<link rel="manifest" href="./termostato-1-rele.webmanifest">
+<link rel="apple-touch-icon" href="./icono-app-oscuro.svg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2236.64 0 854.78 718.47%22 role=%22img%22 aria-label=%22TK%22%3E%3Cdefs%3E%3ClinearGradient id=%22fk%22 x1=%22421.29%22 y1=%22375.97%22 x2=%22908.96%22 y2=%22375.97%22 gradientUnits=%22userSpaceOnUse%22%3E%3Cstop offset=%220%22 stop-color=%22%2329265b%22/%3E%3Cstop offset=%22.64%22 stop-color=%22%232e2b7a%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon fill=%22%233466ae%22 points=%22246.71 639.26 246.71 143.38 50.36 143.38 50.36 0 622.95 0 622.95 143.38 427.52 143.38 427.52 639.26 246.71 639.26%22/%3E%3Cg transform=%22translate(-17.54 -56.34)%22%3E%3Cpolygon fill=%22url(%23fk)%22 points=%22908.96 695.6 634.65 339.57 894.35 56.34 696.18 56.34 421.3 351.31 421.3 564.81 515.83 463.52 698.92 695.6 908.96 695.6%22/%3E%3Cpath fill=%22%23313132%22 d=%22M463.23%2C765.85c-215.43%2C0-390.07-106.11-390.07-237%2C0-73.42%2C55-139%2C141.21-182.5-97.1%2C43.11-160.19%2C112.8-160.19%2C191.46%2C0%2C130.89%2C174.65%2C237%2C390.08%2C237%2C94.6%2C0%2C181.33-20.46%2C248.86-54.5-64.47%2C28.63-143.92%2C45.54-229.89%2C45.54%22/%3E%3C/g%3E%3C/svg%3E">
+<style>
+:root{
+  --ground:#E9EDF6;
+  --surface:#FFFFFF;
+  --surface-2:#F2F5FC;
+  --line:#DBE2F0;
+  --line-soft:#EAEEF7;
+  --ink:#231F20;
+  --ink-2:#565B6C;
+  --muted:#8A91A6;
+  --azul:#1D71B8;
+  --indigo:#2E2A5C;
+  --c-cold:#1D71B8;
+  --c-mid:#E5D6C2;
+  --c-hot:#E8952C;
+  --calor:#B96A12;
+  --calor-bg:rgba(232,149,44,.16);
+  --ok:#1B8F62;
+  --ok-bg:rgba(27,143,98,.12);
+  --stop:#B23A2B;
+  --stop-bg:rgba(178,58,43,.09);
+  --serie-1:#1D71B8;
+  --serie-2:#9AA1B5;
+  --chip:#EDF1FA;
+  /* Logotipo oficial TK: azul de la T, degradado de la K y gris del arco */
+  --lg-blue:#3466AE;
+  --lg-k1:#29265B;
+  --lg-k2:#2E2B7A;
+  --lg-arc:#313132;
+  --shadow:0 22px 50px -30px rgba(46,42,92,.55), 0 1px 2px rgba(46,42,92,.05);
+  --r:20px;
+  --track:186px;
+  --chart-h:84px;
+  --sans:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,"Helvetica Neue",sans-serif;
+  --mono:"Cascadia Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --row:40px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E0E22;
+    --surface:#191934;
+    --surface-2:#212143;
+    --line:#2D2D55;
+    --line-soft:#242449;
+    --ink:#EDEFF8;
+    --ink-2:#AEB4CB;
+    --muted:#7B8299;
+    --azul:#57A3E4;
+    --indigo:#9A92F0;
+    --c-cold:#3E8FD0;
+    --c-mid:#C9B79E;
+    --c-hot:#F2A83F;
+    --calor:#F2A83F;
+    --calor-bg:rgba(242,168,63,.16);
+    --ok:#3EC38C;
+    --ok-bg:rgba(62,195,140,.14);
+    --stop:#E0705F;
+    --stop-bg:rgba(224,112,95,.12);
+    --serie-1:#57A3E4;
+    --serie-2:#767D99;
+    --chip:#242449;
+    /* Sobre fondo oscuro el logotipo sube de luminosidad para no apagarse */
+    --lg-blue:#7FAEE8;
+    --lg-k1:#8F8AE6;
+    --lg-k2:#A9A2F5;
+    --lg-arc:#8A90A6;
+    --shadow:0 24px 60px -34px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E0E22;
+  --surface:#191934;
+  --surface-2:#212143;
+  --line:#2D2D55;
+  --line-soft:#242449;
+  --ink:#EDEFF8;
+  --ink-2:#AEB4CB;
+  --muted:#7B8299;
+  --azul:#57A3E4;
+  --indigo:#9A92F0;
+  --c-cold:#3E8FD0;
+  --c-mid:#C9B79E;
+  --c-hot:#F2A83F;
+  --calor:#F2A83F;
+  --calor-bg:rgba(242,168,63,.16);
+  --ok:#3EC38C;
+  --ok-bg:rgba(62,195,140,.14);
+  --stop:#E0705F;
+  --stop-bg:rgba(224,112,95,.12);
+  --serie-1:#57A3E4;
+  --serie-2:#767D99;
+  --chip:#242449;
+  /* Sobre fondo oscuro el logotipo sube de luminosidad para no apagarse */
+  --lg-blue:#7FAEE8;
+  --lg-k1:#8F8AE6;
+  --lg-k2:#A9A2F5;
+  --lg-arc:#8A90A6;
+  --shadow:0 24px 60px -34px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:
+    radial-gradient(1100px 520px at 50% -12%, color-mix(in srgb, var(--surface) 70%, transparent), transparent 70%),
+    var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  min-height:100dvh;
+  padding:13px 14px 26px;
+  padding-left:max(14px, env(safe-area-inset-left));
+  padding-right:max(14px, env(safe-area-inset-right));
+  padding-bottom:max(26px, env(safe-area-inset-bottom));
+}
+button{font-family:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--azul);outline-offset:3px;border-radius:6px}
+
+/* ============ REJILLA RESPONSIVA ============
+   Teléfono: una columna.
+   Tablet:   dos columnas, el monitor cruza las dos.
+   Escritorio: monitor a la izquierda, controles en un riel a la derecha. */
+.app{max-width:472px;margin-inline:auto;display:flex;flex-direction:column;gap:10px}
+.rail{display:flex;flex-direction:column;gap:10px;min-width:0}
+
+/* Tablet: el riel se parte en dos; la salida cruza las dos columnas. */
+@media (min-width:760px){
+  :root{--track:268px;--chart-h:112px;--row:44px}
+  body{padding:26px 22px 48px}
+  .app{max-width:900px;gap:16px}
+  .rail{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .rail>.power{grid-column:1 / -1}
+}
+
+/* Escritorio: monitor a la izquierda, riel de controles a la derecha.
+   Colocación automática — nada depende de contar filas, así la alerta
+   de error puede aparecer sin descuadrar el resto. */
+@media (min-width:1200px){
+  :root{--track:320px;--chart-h:150px}
+  body{padding:34px 28px 56px}
+  .app{
+    max-width:1200px;
+    display:grid;
+    grid-template-columns:minmax(0,1.45fr) minmax(340px,1fr);
+    align-items:start;
+    gap:18px;
+  }
+  .app>.topbar,.app>.connbar,.app>.alert,.app>.stop,.app>.foot{grid-column:1 / -1}
+  /* El align-items:start de la regla de tablet sigue vigente aqui y, en
+     columna, encoge las tarjetas al ancho de su contenido: se devuelve. */
+  .rail{display:flex;flex-direction:column;gap:16px;align-items:stretch}
+}
+
+.eyebrow{
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+}
+
+/* ---- Encabezado ---- */
+.topbar{display:flex;align-items:center;gap:11px;padding:2px 4px}
+.mark{width:44px;height:37px;flex:none}
+.titles{display:flex;flex-direction:column;gap:2px;margin-right:auto;min-width:0}
+.titles h1{margin:0;font-size:19.5px;font-weight:650;letter-spacing:-.015em;line-height:1.12}
+.brandline{
+  font-size:11px;color:var(--muted);line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.icon-btn{
+  width:36px;height:36px;border-radius:11px;border:1px solid var(--line);
+  background:var(--surface);display:grid;place-items:center;color:var(--ink-2);
+  transition:border-color .18s, color .18s, transform .18s;
+}
+.icon-btn svg{width:17px;height:17px}
+
+/* Sol y luna comparten celda de rejilla: se cruzan girando, sin saltos.
+   Cuál se ve lo decide data-icon, que el JS fija según el tema en vigor. */
+.theme-btn svg{grid-area:1 / 1;transition:opacity .24s ease, transform .42s cubic-bezier(.22,1,.36,1)}
+.theme-btn .i-sun{opacity:0;transform:rotate(-80deg) scale(.5)}
+.theme-btn .i-moon{opacity:0;transform:rotate(80deg) scale(.5)}
+.theme-btn[data-icon="sun"] .i-sun,
+.theme-btn[data-icon="moon"] .i-moon{opacity:1;transform:none}
+
+/* ---- Barra de conexion ---- */
+.connbar{display:flex;align-items:center;gap:10px;padding:2px 4px}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 11px 6px 9px;border-radius:999px;
+  background:var(--chip);border:1px solid var(--line-soft);
+  font-size:12px;font-weight:560;color:var(--ink-2);margin-right:auto;
+}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none}
+.pill[data-state="demo"] .dot{background:var(--indigo);box-shadow:0 0 0 3px color-mix(in srgb,var(--indigo) 22%,transparent)}
+.pill[data-state="on"] .dot{background:var(--ok);box-shadow:0 0 0 3px var(--ok-bg)}
+.pill[data-state="wait"] .dot{background:var(--c-hot);animation:blink 1s infinite}
+/* Conexión caída después de haber tenido equipo: ni verde ni demostración */
+.pill[data-state="perdida"]{color:var(--stop)}
+.pill[data-state="perdida"] .dot{background:var(--stop);box-shadow:0 0 0 3px var(--stop-bg)}
+@keyframes blink{50%{opacity:.25}}
+.btn{
+  border:1px solid var(--line);background:var(--surface);
+  padding:9px 16px;border-radius:12px;font-size:13.5px;font-weight:600;
+  transition:transform .16s, box-shadow .16s, background .16s, border-color .16s;
+}
+.btn:active{transform:translateY(0)}
+.btn-primary{
+  background:linear-gradient(140deg,var(--azul),color-mix(in srgb,var(--azul) 55%,var(--indigo)));
+  border-color:transparent;color:#fff;
+  box-shadow:0 10px 22px -12px rgba(29,113,184,.95);
+}
+
+/* ---- Indicador hibrido ---- */
+.monitor{padding:14px 14px 12px;display:flex;flex-direction:column;gap:11px}
+.monitor-head{display:flex;align-items:center;gap:10px}
+.sensor-name{
+  font-size:13px;font-weight:650;letter-spacing:.02em;color:var(--ink);
+  border-bottom:1px dashed transparent;padding-bottom:1px;outline:none;
+}
+.sensor-name:hover,.sensor-name:focus{border-bottom-color:var(--muted)}
+.chip{
+  margin-left:auto;display:inline-flex;align-items:center;gap:6px;
+  padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:650;
+  letter-spacing:.01em;background:var(--chip);color:var(--ink-2);
+  transition:background .25s, color .25s;
+}
+.chip i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.chip[data-mode="heat"]{background:var(--calor-bg);color:var(--calor)}
+.chip[data-mode="hold"]{background:var(--ok-bg);color:var(--ok)}
+.monitor-body{display:flex;gap:16px;align-items:stretch}
+
+/* Termometro */
+.thermo{display:flex;gap:7px;align-items:stretch;flex:none;padding:0 42px 26px 0;touch-action:none}
+.ticks{
+  height:var(--track);display:flex;flex-direction:column;justify-content:space-between;
+  align-items:flex-end;font-family:var(--mono);font-size:9.5px;color:var(--muted);
+  padding-block:2px;
+}
+.track{
+  position:relative;width:30px;height:var(--track);border-radius:16px;
+  background:var(--surface-2);border:1px solid var(--line);
+  cursor:ns-resize;overflow:visible;
+}
+/* El relleno es de altura fija y se revela con clip-path: no toca layout.
+   El redondeo va en el propio inset para conservar la forma del tubo. */
+.fill{
+  position:absolute;left:0;right:0;bottom:0;height:100%;border-radius:15px;overflow:hidden;
+  clip-path:inset(100% 0 0 0 round 15px);
+  transition:clip-path .5s cubic-bezier(.4,0,.2,1);
+}
+.fill span{
+  position:absolute;left:0;right:0;bottom:0;height:100%;
+  background:linear-gradient(to top,var(--c-cold),var(--c-mid) 52%,var(--c-hot));
+}
+/* Se posiciona con translateY en px, no con bottom: transform va por GPU */
+.target{
+  position:absolute;left:-5px;right:-5px;height:0;border-top:2px dashed var(--indigo);
+  bottom:0;transition:transform .35s ease;pointer-events:none;will-change:transform;
+}
+/* Durante el arrastre no hay transición: la línea debe seguir al dedo, no perseguirlo.
+   Lleva !important porque el bloque de movimiento reducido fija duración a todo. */
+.dragging .fill,.dragging .target{transition:none !important}
+.target b{
+  position:absolute;right:-46px;top:-10px;font-family:var(--mono);font-size:10px;
+  font-weight:600;color:#fff;background:var(--indigo);padding:3px 7px;border-radius:7px;
+  white-space:nowrap;
+}
+.bulb{
+  position:absolute;left:50%;bottom:-28px;transform:translateX(-50%);
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:var(--c-cold);
+  box-shadow:inset 0 3px 8px rgba(255,255,255,.35);
+  transition:background .25s ease;
+}
+/* El halo late con transform+opacity sobre un pseudo, no animando box-shadow:
+   antes esto repintaba en bucle mientras el equipo calentara. */
+.bulb::after{
+  content:"";position:absolute;inset:-1px;border-radius:50%;z-index:-1;
+  background:var(--calor-bg);opacity:0;
+}
+.heating .bulb::after{animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:0}
+  50%{transform:scale(1.5);opacity:1}
+}
+
+/* Lectura + grafica */
+.readout{flex:1;min-width:0;display:flex;flex-direction:column}
+.big{display:flex;align-items:baseline;gap:4px;line-height:1;margin-top:-2px}
+.big em{
+  font-style:normal;font-size:clamp(42px,12vw,60px);font-weight:250;
+  letter-spacing:-.035em;font-variant-numeric:tabular-nums;
+}
+.big .deg{font-size:20px;font-weight:400;color:var(--ink-2)}
+.sub{font-size:12px;color:var(--ink-2);margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+.sub b{font-weight:650;font-variant-numeric:tabular-nums}
+.chart-wrap{position:relative;margin-top:9px;height:var(--chart-h)}
+.chart{width:100%;height:var(--chart-h);display:block;overflow:visible}
+.chart .grid{stroke:var(--line-soft);stroke-width:1}
+.chart .sp{stroke:var(--indigo);stroke-width:1.2;stroke-dasharray:3 4;opacity:.65;fill:none}
+.chart .l1{stroke:var(--serie-1);stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.chart .l2{stroke:var(--serie-2);stroke-width:1.4;fill:none;opacity:.75}
+/* Se posiciona con translateY en px, no con top */
+.tip{
+  position:absolute;right:-1px;top:0;width:9px;height:9px;border-radius:50%;
+  background:var(--serie-1);border:2px solid var(--surface);
+  transform:translate(50%,-50%);transition:transform .5s ease;will-change:transform;
+}
+.tip::after{
+  content:"";position:absolute;inset:-4px;border-radius:50%;
+  border:1.5px solid var(--serie-1);opacity:.4;animation:ripple 2.4s ease-out infinite;
+}
+@keyframes ripple{0%{transform:scale(.6);opacity:.55}100%{transform:scale(2);opacity:0}}
+.axis{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:6px}
+.legend{display:flex;gap:14px;margin-top:8px;font-size:11.5px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:8px;height:8px;border-radius:3px;flex:none}
+.legend .mudo{opacity:.4}
+.legend b{font-variant-numeric:tabular-nums}
+
+/* ---- Controles ---- */
+.ctrl{padding:12px 14px 13px;display:flex;flex-direction:column;gap:10px}
+.ctrl-head{display:flex;align-items:center;gap:8px}
+.ctrl-head .hint{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.stepper{display:flex;align-items:center;gap:12px}
+.step{
+  width:44px;height:44px;border-radius:14px;border:1px solid var(--line);
+  background:var(--surface-2);font-size:21px;font-weight:300;line-height:1;
+  display:grid;place-items:center;color:var(--ink);
+  transition:background .16s, border-color .16s, transform .12s;
+}
+.step:active{transform:scale(.97)}
+.value{
+  flex:1;text-align:center;font-size:28px;font-weight:350;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+}
+.value small{font-size:14px;color:var(--ink-2);font-weight:450;margin-left:2px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.qc{
+  border:1px solid var(--line);background:transparent;color:var(--ink-2);
+  padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;
+  transition:border-color .16s ease, color .16s ease, background .16s ease;
+}
+.qc[aria-pressed="true"]{
+  background:color-mix(in srgb,var(--azul) 12%,transparent);
+  border-color:var(--azul);color:var(--azul);
+}
+
+/* ============ TEMPORIZADOR ============ */
+.timer{padding:12px 14px 13px;display:flex;flex-direction:column;gap:9px}
+
+/* Selector de rueda: dos columnas con scroll-snap */
+.tpick{
+  position:relative;display:flex;align-items:center;justify-content:center;gap:4px;
+  height:calc(var(--row) * 3);
+  transition:opacity .2s ease;
+}
+.tband{
+  position:absolute;left:8px;right:8px;top:50%;transform:translateY(-50%);
+  height:var(--row);border-radius:13px;background:var(--surface-2);
+  border:1px solid var(--line);pointer-events:none;
+}
+.tpick::before,.tpick::after{
+  content:"";position:absolute;left:0;right:0;height:var(--row);pointer-events:none;z-index:2;
+}
+.tpick::before{top:0;background:linear-gradient(var(--surface),transparent)}
+.tpick::after{bottom:0;background:linear-gradient(transparent,var(--surface))}
+.tcol{
+  position:relative;z-index:1;width:82px;height:100%;
+  overflow-y:scroll;scroll-snap-type:y mandatory;
+  scrollbar-width:none;-ms-overflow-style:none;
+  text-align:center;touch-action:pan-y;
+}
+.tcol::-webkit-scrollbar{display:none}
+.tcol .pad{height:var(--row)}
+.tcol b{
+  display:block;height:var(--row);line-height:var(--row);scroll-snap-align:center;
+  font-size:31px;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+  color:var(--muted);transition:color .18s ease, transform .18s ease;
+}
+.tcol b[data-sel]{color:var(--ink);transform:scale(1.04)}
+.tsep{
+  font-size:29px;font-weight:250;color:var(--ink-2);padding-bottom:3px;
+  position:relative;z-index:3;font-variant-numeric:tabular-nums;
+}
+/* Mismos anchos que .tpick (82 + 4 + sep + 4 + 82) para que caigan bajo su columna */
+.tunits{display:flex;justify-content:center;align-items:center;gap:4px;margin-top:-2px}
+.tunits span{width:82px;text-align:center;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);font-weight:600}
+.tunits i{width:13px;flex:none}
+
+/* Cuenta regresiva en marcha */
+.tlive{display:none;flex-direction:column;align-items:center;gap:4px;height:calc(var(--row) * 3);justify-content:center}
+.tlive em{
+  font-style:normal;font-size:46px;font-weight:250;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;color:var(--ink);line-height:1;
+}
+.tlive span{font-size:11.5px;color:var(--muted);letter-spacing:.04em}
+.timer.running .tpick,.timer.running .tunits{display:none}
+.timer.running .tlive{display:flex;animation:tswap 160ms ease-out}
+.timer:not(.running) .tpick{animation:tswap 160ms ease-out}
+@keyframes tswap{from{opacity:0}to{opacity:1}}
+
+/* Boton de tiempo */
+.tbtn{
+  position:relative;overflow:hidden;isolation:isolate;
+  width:100%;height:46px;border-radius:15px;border:1px solid var(--line);
+  background:var(--surface-2);color:var(--ink);
+  font-size:14.5px;font-weight:650;letter-spacing:.01em;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  transition:transform .14s cubic-bezier(.22,1,.36,1), border-color .2s ease, color .2s ease;
+}
+.tbtn:active{transform:scale(.975)}
+.tbtn svg{width:17px;height:17px;position:relative;z-index:2}
+.tbtn .lbl{position:relative;z-index:2}
+/* Relleno de progreso: scaleX, no width, para no relayout en cada tick */
+.tbtn .prog{
+  position:absolute;inset:0;z-index:1;transform-origin:left;transform:scaleX(0);
+  background:color-mix(in srgb,var(--azul) 16%,transparent);
+  transition:transform 700ms linear;
+}
+/* Onda al presionar */
+.tbtn .ring{
+  position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;
+  transform:translate(-50%,-50%) scale(0);opacity:0;z-index:1;
+  background:color-mix(in srgb,var(--azul) 30%,transparent);
+}
+.tbtn.pressed .ring{animation:tring 200ms cubic-bezier(.22,1,.36,1)}
+@keyframes tring{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:.65}
+  100%{transform:translate(-50%,-50%) scale(26);opacity:0}
+}
+.timer.running .tbtn{
+  border-color:color-mix(in srgb,var(--c-hot) 50%,var(--line));
+  color:var(--calor);
+}
+.timer.running .tbtn .prog{background:var(--calor-bg)}
+
+/* ---- Salida unica ----
+   Es el gesto principal del equipo: va centrado, grande, y el estado se lee
+   debajo en palabra completa. Todas las capas del boton comparten una celda
+   de rejilla, asi que se apilan centradas sin position:absolute. */
+.power{padding:14px 16px 17px;display:flex;flex-direction:column;align-items:center;gap:13px;
+  transition:border-color .3s ease}
+.power .eyebrow{align-self:flex-start}
+.power-btn{
+  position:relative;display:grid;place-items:center;
+  width:130px;height:130px;border:0;padding:0;background:none;border-radius:50%;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .18s cubic-bezier(.22,1,.36,1);
+}
+.power-btn>*{grid-area:1 / 1}
+.power-btn:active{transform:scale(.965)}
+.power-btn:focus-visible{outline:2px solid var(--azul);outline-offset:6px;border-radius:50%}
+/* Aro exterior: enmarca el disco y da sensacion de mando fisico. */
+.pb-rim{
+  width:130px;height:130px;border-radius:50%;pointer-events:none;
+  border:1px solid var(--line-soft);
+  transition:border-color .32s ease;
+}
+.power.on .pb-rim{border-color:color-mix(in srgb,var(--c-hot) 38%,transparent)}
+.pb-disc{
+  width:112px;height:112px;border-radius:50%;
+  background:linear-gradient(158deg,var(--surface),var(--surface-2));
+  border:1px solid var(--line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 14px 28px -20px rgba(46,42,92,.9);
+  transition:background .32s ease, border-color .32s ease, box-shadow .32s ease;
+}
+.power.on .pb-disc{
+  background:
+    radial-gradient(120% 120% at 32% 16%, color-mix(in srgb,var(--c-hot) 78%,#fff), transparent 60%),
+    linear-gradient(150deg,var(--c-hot),color-mix(in srgb,var(--c-hot) 55%,var(--stop)));
+  border-color:transparent;
+  box-shadow:0 22px 44px -18px color-mix(in srgb,var(--c-hot) 95%,transparent),
+             inset 0 1px 0 rgba(255,255,255,.32);
+}
+/* Halo: late solo mientras hay salida. Escala y opacidad, nunca box-shadow. */
+.pb-halo{width:112px;height:112px;border-radius:50%;background:var(--calor-bg);opacity:0;pointer-events:none}
+.power.on .pb-halo{animation:pb-pulse 2.6s ease-in-out infinite}
+@keyframes pb-pulse{0%,100%{transform:scale(1);opacity:0}45%{transform:scale(1.3);opacity:1}}
+/* Anillo de confirmacion al pulsar: sale del boton y se desvanece. */
+.pb-ring{
+  width:112px;height:112px;border-radius:50%;pointer-events:none;
+  border:2px solid color-mix(in srgb,var(--c-hot) 55%,transparent);
+  transform:scale(.55);opacity:0;
+}
+.power-btn.pressed .pb-ring{animation:pb-ring 520ms cubic-bezier(.22,1,.36,1)}
+@keyframes pb-ring{0%{transform:scale(.55);opacity:.85}100%{transform:scale(1.36);opacity:0}}
+.pb-icon{width:40px;height:40px;color:var(--ink-2);
+  transition:color .32s ease, transform .32s cubic-bezier(.22,1,.36,1)}
+.power.on .pb-icon{color:#fff;transform:scale(1.06)}
+.power-state{
+  /* 12 px extra sobre el hueco de la tarjeta: el anillo sobresale ~10 px del
+     aro y la palabra tiene que quedar limpia. */
+  margin-top:12px;
+  display:flex;align-items:center;gap:9px;
+  font-size:20px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);transition:color .32s ease;
+}
+.power-state i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.45;flex:none;
+  transition:opacity .32s ease, box-shadow .32s ease}
+.power.on{border-color:color-mix(in srgb,var(--c-hot) 45%,var(--line))}
+.power.on .power-state{color:var(--calor)}
+.power.on .power-state i{opacity:1;box-shadow:0 0 0 4px var(--calor-bg)}
+
+/* Con una sesión en marcha el botón manual no manda: se dice, no se esconde. */
+.power-nota{
+  display:none;align-items:center;gap:6px;margin:0;
+  font-size:11px;line-height:1.45;color:var(--muted);text-align:center;
+}
+.power.bloqueada .power-nota{display:flex}
+.power-nota svg{width:12px;height:12px;flex:none}
+.power.bloqueada .power-btn{cursor:not-allowed}
+.power.bloqueada .power-btn:active{transform:none}
+
+/* ---- Paro + pie ---- */
+.stop{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;padding:12px;border-radius:16px;
+  border:1px solid color-mix(in srgb,var(--stop) 40%,var(--line));
+  background:var(--stop-bg);color:var(--stop);font-size:14px;font-weight:680;
+  transition:background .18s, transform .16s;
+}
+.stop svg{width:17px;height:17px}
+
+/* ---- Hover: solo con ratón de verdad ----
+   En pantalla táctil el tap dispara un hover falso y el elemento
+   se queda levantado hasta que tocas otra cosa. */
+@media (hover:hover) and (pointer:fine){
+  .icon-btn:hover{border-color:var(--azul);color:var(--azul);transform:translateY(-1px)}
+  .btn:hover{transform:translateY(-1px)}
+  .step:hover{border-color:var(--azul);color:var(--azul)}
+  .qc:hover{border-color:var(--azul);color:var(--azul)}
+  .tbtn:hover{border-color:var(--azul)}
+  .power-btn:hover{transform:scale(1.025)}
+  .power-btn:hover .pb-disc{border-color:color-mix(in srgb,var(--c-hot) 45%,var(--line))}
+  .stop:hover{background:color-mix(in srgb,var(--stop) 16%,transparent);transform:translateY(-1px)}
+}
+.foot{display:flex;flex-direction:column;align-items:center;gap:9px;margin-top:2px}
+.note{
+  font-size:11.5px;line-height:1.65;color:var(--muted);text-align:center;
+  margin:0 6px;text-wrap:balance;
+}
+.note code{font-family:var(--mono);font-size:10.5px}
+.sig{
+  margin:0;display:flex;align-items:center;gap:9px;
+  font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:650;
+  color:var(--muted);opacity:.85;
+}
+.sig i{width:3px;height:3px;border-radius:50%;background:currentColor;flex:none;opacity:.6}
+.sig b{font-family:var(--mono);font-weight:600;letter-spacing:.05em}
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
+  background:var(--indigo);color:#fff;padding:10px 18px;border-radius:999px;
+  font-size:13px;font-weight:600;opacity:0;pointer-events:none;
+  transition:opacity .25s, transform .25s;z-index:50;
+  box-shadow:0 16px 30px -18px rgba(0,0,0,.8);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.alert{
+  display:none;gap:9px;align-items:center;padding:11px 14px;border-radius:14px;
+  background:var(--stop-bg);border:1px solid color-mix(in srgb,var(--stop) 35%,transparent);
+  color:var(--stop);font-size:12.5px;font-weight:600;
+}
+.alert.show{display:flex}
+
+/* ============ SPLASH · Sello ============
+   Índigo constante en los dos temas: continúa el icono de la app. */
+#splash{
+  position:fixed;inset:0;z-index:100;display:grid;place-items:center;
+  background:linear-gradient(160deg,#2E2A5C,#1B1840);
+  animation:sp-out 200ms cubic-bezier(.23,1,.32,1) 420ms forwards;
+}
+#splash .in{display:flex;flex-direction:column;align-items:center;gap:22px;position:relative}
+#splash .halo{
+  position:absolute;width:390px;height:390px;border-radius:50%;
+  background:radial-gradient(circle,rgba(87,163,228,.26),transparent 68%);
+  opacity:0;transform:scale(.6);animation:sp-halo 380ms cubic-bezier(.22,1,.36,1) forwards;
+}
+/* El propio logotipo ya trae la firma de marca: no hace falta texto aparte. */
+#splash{--lg-blue:#FFFFFF;--lg-k1:#6E9FDD;--lg-k2:#9AC0F2;--lg-arc:#8F93A3}
+#splash svg{width:min(248px,62vw);height:auto;display:block;position:relative;
+  opacity:0;transform:scale(1.14);animation:sp-land 320ms cubic-bezier(.16,1.02,.3,1) 30ms forwards}
+@keyframes sp-halo{to{opacity:1;transform:scale(1)}}
+@keyframes sp-land{to{opacity:1;transform:scale(1)}}
+@keyframes sp-out{to{opacity:0;transform:scale(1.04);visibility:hidden}}
+/* Entra solapada con la salida del splash: se lee como un solo cruce.
+   App utilizable a los ~450 ms; splash retirado del todo a los 620 ms. */
+.app{opacity:0;transform:translateY(10px);animation:app-in 240ms cubic-bezier(.22,1,.36,1) 450ms forwards}
+@keyframes app-in{to{opacity:1;transform:none}}
+
+/* Con la app apretada casi no hay scroll; el poco que queda separa las
+   secciones en vez de arrastrarlas todas juntas. La clase la pone el JS,
+   asi que sin JS no se esconde nada. */
+.reveal{opacity:0;transform:translateY(16px);
+  transition:opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1)}
+.reveal.seen{opacity:1;transform:none}
+
+@media (max-width:400px){
+  :root{--track:176px;--row:38px;--chart-h:78px}
+}
+/* Movimiento reducido: se quita el desplazamiento, no el fundido.
+   Los cambios de opacidad y color ayudan a entender qué cambió y se conservan. */
+@media (prefers-reduced-motion:reduce){
+  /* nada de recorrer distancia */
+  #splash svg,#splash .halo,.app{transform:none !important}
+  /* nada de latidos ni ondas en bucle */
+  .heating .bulb::after,.tip::after,.pill[data-state="wait"] .dot,.tbtn.pressed .ring,
+  .power.on .pb-halo,.power-btn.pressed .pb-ring{animation:none !important}
+  .heating .bulb::after{opacity:.9}
+  /* ni desplazamientos de 1px al pasar el ratón */
+  .btn:hover,.icon-btn:hover,.power-btn:hover,.stop:hover{transform:none !important}
+  /* Se acorta elemento por elemento, nunca con `*`: un selector universal
+     con duración le pone `transition: all` a toda la página. */
+  #splash,#splash .halo,#splash svg{animation-duration:160ms !important}
+  #splash{animation-delay:260ms !important}
+  .app{animation-duration:160ms !important;animation-delay:270ms !important}
+  .fill,.target,.tip,.bulb,.tbtn .prog{transition-duration:160ms !important}
+  .reveal{opacity:1 !important;transform:none !important;transition:none !important}
+  .tcol{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="splash" aria-hidden="true">
+  <div class="in">
+    <div class="halo"></div>
+    <svg viewBox="0 0 964.91 887.32" aria-label="TK · Ingeniería para la estética">
+      <defs><linearGradient id="sk" x1="421.29" y1="375.97" x2="908.96" y2="375.97" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--lg-k1)"/><stop offset=".64" style="stop-color:var(--lg-k2)"/></linearGradient><linearGradient id="st" x1="17.54" y1="897.38" x2="418.43" y2="897.38" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--lg-k1)"/><stop offset=".64" style="stop-color:var(--lg-k2)"/></linearGradient></defs>
+      <polygon fill="var(--lg-blue)" points="246.71 639.26 246.71 143.38 50.36 143.38 50.36 0 622.95 0 622.95 143.38 427.52 143.38 427.52 639.26 246.71 639.26"/>
+      <g transform="translate(-17.54 -56.34)"><polygon fill="url(#sk)" points="908.96 695.6 634.65 339.57 894.35 56.34 696.18 56.34 421.3 351.31 421.3 564.81 515.83 463.52 698.92 695.6 908.96 695.6"/><path fill="url(#st)" d="M418.43,923H405.62l.19-6.54a17.51,17.51,0,0,1-6.47,6.33,19.45,19.45,0,0,1-9.2,2,18,18,0,0,1-14.6-6.73c-3.69-4.47-5.54-10.4-5.54-17.75,0-7.67,1.83-13.68,5.46-18s8.67-6.41,15.13-6.41a17.16,17.16,0,0,1,8.89,2.27,18.55,18.55,0,0,1,6.43,6.78v-7.51h12.52Zm-12.06-22.8c0-4.1-1-7.33-3.07-9.72A10.5,10.5,0,0,0,395,886.9a10.68,10.68,0,0,0-8.46,3.53c-2.07,2.37-3.1,5.63-3.1,9.75s1,7.29,3.05,9.58a12.09,12.09,0,0,0,16.91,0C405.38,907.47,406.37,904.3,406.37,900.18Zm-34.2-46.53-14.52,17.1h-6.57l9.13-17.1ZM352,923v-45.5h13.19V923ZM331.2,889.16q2-6.61,5.74-9.93a13.57,13.57,0,0,1,9.26-3.29,28.83,28.83,0,0,1,4.12.49l.84.13-2,14.19a16.15,16.15,0,0,0-3-.91,17.16,17.16,0,0,0-3.18-.3c-4,0-6.92,1-8.67,3.07s-2.67,5.52-2.67,10.34v20H318.44v-45.5h13Zm-17.05,14.36H280a11.77,11.77,0,0,0,3.58,7.32,11,11,0,0,0,7.57,2.45,13.06,13.06,0,0,0,6.24-1.4,11.23,11.23,0,0,0,4.36-4.2L312.38,913a24.34,24.34,0,0,1-9,8.86,25.63,25.63,0,0,1-12.57,2.91c-7.35,0-13.2-2.21-17.48-6.6s-6.46-10.29-6.46-17.69q0-10.71,6.76-17.64t17.29-6.92q10.86,0,17.15,6.47c4.2,4.33,6.3,10.2,6.3,17.66,0,.4,0,.83,0,1.32S314.23,902.57,314.15,903.52Zm-13.08-8a10,10,0,0,0-3.13-6.52,10.4,10.4,0,0,0-7-2.2,10.79,10.79,0,0,0-7.14,2.2,10.3,10.3,0,0,0-3.39,6.52ZM248.82,923v-45.5H262V923Zm-1.16-64.19a7.77,7.77,0,0,1,7.71-7.7,7.74,7.74,0,0,1,5.52,2.24,7.69,7.69,0,0,1,0,10.93,7.59,7.59,0,0,1-5.52,2.29A7.26,7.26,0,0,1,250,864.2,7.39,7.39,0,0,1,247.66,858.79ZM195.29,923v-45.5h13v7.13a24.63,24.63,0,0,1,7.7-6.57,19.61,19.61,0,0,1,9.1-2.1,20,20,0,0,1,8.88,1.78,13.15,13.15,0,0,1,5.66,5.47,15,15,0,0,1,1.48,4.28,45.23,45.23,0,0,1,.43,7.51v28H228.27V900.5q0-8.4-1.94-11.09c-1.32-1.81-3.53-2.7-6.68-2.7a11.13,11.13,0,0,0-5,1.14,10.76,10.76,0,0,0-5.57,6.91,27.77,27.77,0,0,0-.54,6.39V923ZM191,903.52H156.8a11.82,11.82,0,0,0,3.58,7.32,11,11,0,0,0,7.57,2.45,13.08,13.08,0,0,0,6.25-1.4,11.3,11.3,0,0,0,4.36-4.2L189.22,913a24.39,24.39,0,0,1-9,8.86,25.67,25.67,0,0,1-12.58,2.91c-7.35,0-13.19-2.21-17.47-6.6s-6.46-10.29-6.46-17.69q0-10.71,6.75-17.64t17.29-6.92q10.86,0,17.15,6.47c4.2,4.33,6.3,10.2,6.3,17.66,0,.4,0,.83,0,1.32S191.08,902.57,191,903.52Zm-13.09-8a10,10,0,0,0-3.12-6.52,10.44,10.44,0,0,0-7-2.2,10.74,10.74,0,0,0-7.13,2.2,10.36,10.36,0,0,0-3.4,6.52Zm-50.65,4.66c0-4-1-7.19-3.07-9.54a10.58,10.58,0,0,0-8.35-3.47,10.79,10.79,0,0,0-8.48,3.45q-3.08,3.46-3.07,9.56t3,9.45c2,2.26,4.82,3.39,8.46,3.39s6.43-1.13,8.45-3.39S127.26,904.22,127.26,900.18Zm12,22.05c0,4.79-.27,8.16-.83,10.12a11.9,11.9,0,0,1-3,5.06,17.55,17.55,0,0,1-7.59,4.74,37,37,0,0,1-11.28,1.51q-11.1,0-16.83-3.53c-3.85-2.34-5.92-5.92-6.27-10.71H108a5,5,0,0,0,2.42,3.93,12.23,12.23,0,0,0,6.17,1.24c3.58,0,6.19-.92,7.78-2.78s2.37-4.95,2.37-9.29V916a17.59,17.59,0,0,1-6.35,6.24,18,18,0,0,1-8.86,2.05q-9.37,0-15-6.57t-5.63-17.69q0-11.31,5.49-17.72t15.11-6.41a17,17,0,0,1,8.83,2.29A18.78,18.78,0,0,1,126.8,885v-7.51h12.41ZM40.68,923v-45.5h13v7.13a24.85,24.85,0,0,1,7.7-6.57,19.64,19.64,0,0,1,9.1-2.1,20,20,0,0,1,8.89,1.78A13.13,13.13,0,0,1,85,883.19a14.42,14.42,0,0,1,1.48,4.28,45,45,0,0,1,.44,7.51v28H73.67V900.5q0-8.4-1.94-11.09c-1.32-1.81-3.53-2.7-6.68-2.7a11.2,11.2,0,0,0-5,1.14,10.76,10.76,0,0,0-5.57,6.91,28.35,28.35,0,0,0-.54,6.39V923Zm-23.14,0v-67.9H32.06V923Z"/><path fill="var(--lg-blue)" d="M982.46,880.55V923H975.4v-7.7a18.32,18.32,0,0,1-6.49,7.06,16.58,16.58,0,0,1-8.88,2.45q-9.16,0-14.73-6.3t-5.6-16.62c0-7,1.8-12.54,5.44-16.66s8.45-6.2,14.51-6.2a17.48,17.48,0,0,1,9.26,2.37,17.26,17.26,0,0,1,6.33,7.14v-8Zm-7.06,21.62c0-4.79-1.29-8.64-3.9-11.58a13.06,13.06,0,0,0-10.23-4.39c-4.37,0-7.76,1.35-10.21,4s-3.66,6.44-3.66,11.26c0,5.14,1.24,9.1,3.69,11.87s5.95,4.17,10.45,4.17c4.33,0,7.75-1.34,10.2-4.06S975.4,907,975.4,902.17Zm-36.87,10.74v8.46a23.07,23.07,0,0,1-6.46,2.56,34.28,34.28,0,0,1-7.78.86q-9.81,0-15.83-6.25t-6-16.37c0-6.81,2.08-12.36,6.22-16.69S918.1,879,924.56,879a32.82,32.82,0,0,1,6.89.73,28.73,28.73,0,0,1,6.33,2.21v7.78A24.23,24.23,0,0,0,932,887a20.24,20.24,0,0,0-6-1c-4.76,0-8.59,1.48-11.47,4.47s-4.31,7-4.31,11.9a15,15,0,0,0,4.34,10.94,14.65,14.65,0,0,0,10.88,4.41,18.4,18.4,0,0,0,6.46-1.16A28.19,28.19,0,0,0,938.53,912.91ZM889,923V880.55h7.35V923Zm-1.7-62.89a5.09,5.09,0,0,1,1.56-3.75,5.14,5.14,0,0,1,3.77-1.53,5.08,5.08,0,0,1,3.74,1.56,5.28,5.28,0,0,1,1.54,3.82,4.92,4.92,0,0,1-1.54,3.69,5.09,5.09,0,0,1-3.74,1.54,5.15,5.15,0,0,1-3.77-1.54A5,5,0,0,1,887.34,860.09Zm-16.43,26.44h-7.79v-6h7.79V863.42h7.43v17.13h7.78v6h-7.78V923h-7.43ZM837,873.87l9.45-16.15h9.31l-13.22,16.15Zm27.54,29H830.91v.68c0,4.55,1.29,8.21,3.91,11a13.16,13.16,0,0,0,10.15,4.2,13.55,13.55,0,0,0,7.7-2.32,20,20,0,0,0,6.08-6.92l5.52,3.72a21.33,21.33,0,0,1-19.68,11.58q-9.69,0-15.67-6.41t-6-16.78q0-10,5.95-16.31a19.93,19.93,0,0,1,15.24-6.36q9.42,0,14.92,6t5.49,16.48ZM856.76,897c-.24-3.74-1.51-6.65-3.74-8.67s-5.31-3-9.21-3a12.64,12.64,0,0,0-8.81,3.17,12.91,12.91,0,0,0-4.09,8.51Zm-47.88-10.44H801.1v-6h7.78V863.42h7.43v17.13h7.78v6h-7.78V923h-7.43Zm-38.59,29.32,6.19-4.18a12.89,12.89,0,0,0,4.47,5.07,11.65,11.65,0,0,0,6.35,1.69,8.89,8.89,0,0,0,5.76-1.78,5.57,5.57,0,0,0,2.21-4.63,5,5,0,0,0-1.51-3.68,13.44,13.44,0,0,0-5.17-2.75l-1.21-.41c-10.31-3.58-15.48-8-15.48-13.38a11.64,11.64,0,0,1,4.17-9.23c2.78-2.37,6.41-3.56,10.85-3.56a19.07,19.07,0,0,1,9.48,2.21,12.66,12.66,0,0,1,5.63,6.25l-5.87,3.61a10.06,10.06,0,0,0-3.82-4.53,10.89,10.89,0,0,0-5.87-1.56,7.63,7.63,0,0,0-5.23,1.78,5.88,5.88,0,0,0-2,4.57q0,3.93,8.43,6.55c1.05.35,1.89.59,2.51.78,4.6,1.48,7.83,3.18,9.63,5.09a10.49,10.49,0,0,1,2.72,7.54,12.26,12.26,0,0,1-4.28,9.74c-2.88,2.51-6.62,3.75-11.22,3.75a21.07,21.07,0,0,1-10.07-2.24A16.32,16.32,0,0,1,770.29,915.85Zm-.77-13H735.89v.68c0,4.55,1.3,8.21,3.91,11a13.16,13.16,0,0,0,10.15,4.2,13.53,13.53,0,0,0,7.7-2.32,20,20,0,0,0,6.08-6.92l5.52,3.72a21.33,21.33,0,0,1-19.68,11.58q-9.69,0-15.67-6.41t-6-16.78c0-6.65,2-12.09,6-16.31a19.93,19.93,0,0,1,15.24-6.36q9.42,0,14.92,6t5.49,16.48ZM761.74,897c-.24-3.74-1.51-6.65-3.74-8.67s-5.31-3-9.21-3a12.6,12.6,0,0,0-8.8,3.17,12.87,12.87,0,0,0-4.1,8.51ZM700.5,880.55V923h-7.06v-7.7a18.4,18.4,0,0,1-6.49,7.06,16.6,16.6,0,0,1-8.88,2.45q-9.18,0-14.73-6.3t-5.6-16.62c0-7,1.8-12.54,5.44-16.66s8.45-6.2,14.51-6.2a16.29,16.29,0,0,1,15.59,9.51v-8Zm-7.06,21.62c0-4.79-1.29-8.64-3.9-11.58a13.08,13.08,0,0,0-10.23-4.39c-4.37,0-7.76,1.35-10.21,4s-3.66,6.44-3.66,11.26c0,5.14,1.24,9.1,3.69,11.87s6,4.17,10.44,4.17c4.34,0,7.76-1.34,10.21-4.06S693.44,907,693.44,902.17ZM644.05,923V851.09h7.43V923Zm-31.49-42.43V923H605.5v-7.7a18.32,18.32,0,0,1-6.49,7.06,16.58,16.58,0,0,1-8.88,2.45q-9.17,0-14.73-6.3t-5.6-16.62c0-7,1.8-12.54,5.44-16.66s8.45-6.2,14.51-6.2a17.45,17.45,0,0,1,9.26,2.37,17.26,17.26,0,0,1,6.33,7.14v-8Zm-7.06,21.62c0-4.79-1.29-8.64-3.9-11.58a13.06,13.06,0,0,0-10.23-4.39q-6.54,0-10.21,4c-2.45,2.69-3.66,6.44-3.66,11.26,0,5.14,1.24,9.1,3.69,11.87s5.95,4.17,10.45,4.17c4.33,0,7.75-1.34,10.2-4.06S605.5,907,605.5,902.17Zm-60,20.81V880.55h6.43v8.8c2-3.69,4-6.3,6.25-7.89a13.27,13.27,0,0,1,8-2.37,15.78,15.78,0,0,1,2.53.22,15.59,15.59,0,0,1,2.39.62l-2.42,6.54a19.51,19.51,0,0,0-2.34-.62,12.91,12.91,0,0,0-2.16-.21c-3.82,0-6.7,1.37-8.61,4.14s-2.88,7-2.88,12.52V923Zm-8.92-42.43V923H529.5v-7.7a18.32,18.32,0,0,1-6.49,7.06,16.58,16.58,0,0,1-8.88,2.45q-9.17,0-14.73-6.3t-5.6-16.62c0-7,1.8-12.54,5.44-16.66s8.45-6.2,14.51-6.2a17.45,17.45,0,0,1,9.26,2.37,17.26,17.26,0,0,1,6.33,7.14v-8Zm-7.06,21.62c0-4.79-1.29-8.64-3.9-11.58a13.06,13.06,0,0,0-10.23-4.39q-6.54,0-10.21,4c-2.45,2.69-3.66,6.44-3.66,11.26,0,5.14,1.24,9.1,3.69,11.87s5.95,4.17,10.45,4.17c4.33,0,7.75-1.34,10.2-4.06S529.5,907,529.5,902.17Zm-81.05,41.49V880.55h6.89v8a18.27,18.27,0,0,1,6.52-7.06,16.83,16.83,0,0,1,9-2.45q9.16,0,14.76,6.25c3.68,4.17,5.54,9.72,5.54,16.61s-1.8,12.6-5.44,16.72-8.51,6.2-14.59,6.2a17.1,17.1,0,0,1-9.13-2.4,17.49,17.49,0,0,1-6.35-7.11v28.38Zm7-41.79q0,7.15,4,11.47a13.37,13.37,0,0,0,10.42,4.31c4.22,0,7.56-1.32,10-4s3.63-6.27,3.63-10.93c0-5.22-1.21-9.31-3.63-12.3S474,886,469.69,886s-7.91,1.4-10.44,4.23S455.45,897,455.45,901.87Z"/><path fill="var(--lg-arc)" d="M463.23,765.85c-215.43,0-390.07-106.11-390.07-237,0-73.42,55-139,141.21-182.5-97.1,43.11-160.19,112.8-160.19,191.46,0,130.89,174.65,237,390.08,237,94.6,0,181.33-20.46,248.86-54.5-64.47,28.63-143.92,45.54-229.89,45.54"/></g>
+    </svg>
+  </div>
+</div>
+
+<div class="app">
+
+  <header class="topbar span-all">
+    <svg class="mark" viewBox="36.64 0 854.78 718.47" aria-label="TK">
+      <defs><linearGradient id="mk" x1="421.29" y1="375.97" x2="908.96" y2="375.97" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--lg-k1)"/><stop offset=".64" style="stop-color:var(--lg-k2)"/></linearGradient></defs>
+      <polygon fill="var(--lg-blue)" points="246.71 639.26 246.71 143.38 50.36 143.38 50.36 0 622.95 0 622.95 143.38 427.52 143.38 427.52 639.26 246.71 639.26"/>
+      <g transform="translate(-17.54 -56.34)"><polygon fill="url(#mk)" points="908.96 695.6 634.65 339.57 894.35 56.34 696.18 56.34 421.3 351.31 421.3 564.81 515.83 463.52 698.92 695.6 908.96 695.6"/><path fill="var(--lg-arc)" d="M463.23,765.85c-215.43,0-390.07-106.11-390.07-237,0-73.42,55-139,141.21-182.5-97.1,43.11-160.19,112.8-160.19,191.46,0,130.89,174.65,237,390.08,237,94.6,0,181.33-20.46,248.86-54.5-64.47,28.63-143.92,45.54-229.89,45.54"/></g>
+    </svg>
+    <div class="titles">
+      <h1>Termoterapia TEO</h1>
+      <span class="brandline">TK &mdash; Ingenier&iacute;a para la est&eacute;tica</span>
+    </div>
+    <button class="icon-btn theme-btn" id="themeBtn" data-icon="moon" aria-label="Cambiar a tema oscuro">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.7v2M12 19.3v2M4.4 4.4l1.4 1.4M18.2 18.2l1.4 1.4M2.7 12h2M19.3 12h2M4.4 19.6l1.4-1.4M18.2 5.8l1.4-1.4"/></svg>
+    </button>
+  </header>
+
+  <div class="connbar span-all">
+    <span class="pill" id="pill" data-state="demo"><i class="dot"></i><span id="pillText">Modo demostraci&oacute;n</span></span>
+    <button class="btn btn-primary" id="connectBtn">Conectar</button>
+  </div>
+
+  <div class="alert span-all" id="alert"></div>
+
+  <section class="card monitor" id="monitor">
+    <div class="monitor-head">
+      <span class="eyebrow">Sensor principal</span>
+      <span class="sensor-name" id="sensorName" contenteditable="true" spellcheck="false">Tanque</span>
+      <span class="chip" id="modeChip" data-mode="idle"><i></i><span id="modeText">En reposo</span></span>
+    </div>
+
+    <div class="monitor-body">
+      <div class="thermo" id="thermo">
+        <div class="ticks"><span>50</span><span>40</span><span>30</span><span>20</span></div>
+        <div class="track" id="track" role="slider" tabindex="0"
+             aria-label="Temperatura objetivo" aria-valuemin="20" aria-valuemax="50" aria-valuenow="40">
+          <div class="fill" id="fill"><span></span></div>
+          <div class="target" id="target"><b id="targetLabel">60.0&deg;</b></div>
+          <div class="bulb" id="bulb"></div>
+        </div>
+      </div>
+
+      <div class="readout">
+        <div class="big"><em id="tempMain">--</em><span class="deg">&deg;C</span></div>
+        <div class="sub">
+          <span>Objetivo <b id="spEcho">40.0 &deg;C</b></span>
+          <span>Faltan <b id="delta">--</b></span>
+        </div>
+
+        <div class="chart-wrap">
+          <svg class="chart" viewBox="0 0 320 96" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" style="stop-color:var(--serie-1);stop-opacity:.30"/>
+                <stop offset="100%" style="stop-color:var(--serie-1);stop-opacity:0"/>
+              </linearGradient>
+            </defs>
+            <g class="grid" vector-effect="non-scaling-stroke">
+              <line x1="0" y1="24" x2="320" y2="24" vector-effect="non-scaling-stroke"/>
+              <line x1="0" y1="48" x2="320" y2="48" vector-effect="non-scaling-stroke"/>
+              <line x1="0" y1="72" x2="320" y2="72" vector-effect="non-scaling-stroke"/>
+            </g>
+            <path class="sp" id="spPath" vector-effect="non-scaling-stroke"/>
+            <path id="areaPath" fill="url(#grad)"/>
+            <path class="l2" id="linePath2" vector-effect="non-scaling-stroke"/>
+            <path class="l1" id="linePath1" vector-effect="non-scaling-stroke"/>
+          </svg>
+          <div class="tip" id="tip" style="top:50%"></div>
+        </div>
+
+        <div class="axis"><span>-6 min</span><span>-4 min</span><span>-2 min</span><span>ahora</span></div>
+        <div class="legend">
+          <span><i style="background:var(--serie-1)"></i>Tanque <b id="lg1">--</b></span>
+          <span><i style="background:var(--serie-2)"></i>Retorno <b id="lg2">--</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="rail">
+
+  <section class="card ctrl">
+    <div class="ctrl-head">
+      <span class="eyebrow">Temperatura objetivo</span>
+      <span class="hint">rango 20&ndash;50 &deg;C</span>
+    </div>
+    <div class="stepper">
+      <button class="step" id="spDown" aria-label="Bajar objetivo">&minus;</button>
+      <div class="value"><span id="spValue">40.0</span><small>&deg;C</small></div>
+      <button class="step" id="spUp" aria-label="Subir objetivo">+</button>
+    </div>
+    <div class="chips" id="spChips">
+      <button class="qc" data-sp="35">35&deg;</button>
+      <button class="qc" data-sp="40">40&deg;</button>
+      <button class="qc" data-sp="45">45&deg;</button>
+      <button class="qc" data-sp="47">47&deg;</button>
+    </div>
+  </section>
+
+  <section class="card timer" id="timerCard">
+    <div class="ctrl-head">
+      <span class="eyebrow">Selecci&oacute;n de tiempo</span>
+      <span class="hint" id="timerHint">sin l&iacute;mite</span>
+    </div>
+
+    <div class="tpick" id="tpick">
+      <div class="tband"></div>
+      <div class="tcol" id="tMins" role="slider" tabindex="0"
+           aria-label="Minutos" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0"></div>
+      <div class="tsep">:</div>
+      <div class="tcol" id="tSecs" role="slider" tabindex="0"
+           aria-label="Segundos" aria-valuemin="0" aria-valuemax="59" aria-valuenow="0"></div>
+    </div>
+    <div class="tunits"><span>min</span><i></i><span>seg</span></div>
+
+    <div class="tlive">
+      <em id="tLive">00:00</em>
+      <span id="tLiveNote">restante</span>
+    </div>
+
+    <button class="tbtn" id="timerBtn">
+      <span class="prog" id="tProg"></span>
+      <span class="ring"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="tIcon">
+        <circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9 2h6"/>
+      </svg>
+      <span class="lbl" id="tLabel">Iniciar</span>
+    </button>
+  </section>
+
+  <section class="card power" id="power">
+    <span class="eyebrow">Salida</span>
+    <button class="power-btn" id="powerBtn" aria-pressed="false" aria-label="Encender la salida">
+      <span class="pb-halo"></span>
+      <span class="pb-rim"></span>
+      <span class="pb-disc"></span>
+      <span class="pb-ring"></span>
+      <svg class="pb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v9"/><path d="M6.6 6.6a8 8 0 1 0 10.8 0"/></svg>
+    </button>
+    <div class="power-state"><i></i><span id="powerState">Apagado</span></div>
+    <p class="power-nota">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+      Sesi&oacute;n en marcha &mdash; se corta con <b>Detener</b> o <b>Paro total</b>
+    </p>
+  </section>
+
+  </div><!-- /.rail -->
+
+  <button class="stop span-all" id="stopBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v9"/><path d="M6.6 6.6a8 8 0 1 0 10.8 0"/></svg>
+    Paro total
+  </button>
+
+  <footer class="foot span-all">
+    <p class="note">
+      El rel&eacute; y el temporizador los regula el ESP32-C3; la app solo env&iacute;a &oacute;rdenes por Bluetooth.
+      Protocolo en <code>docs/PROTOCOLO.md</code>. En iPhone abre este enlace con la app <b>Bluefy</b>.
+    </p>
+    <p class="sig"><span>RPI Ingenier&iacute;a</span><i></i><span>Versi&oacute;n <b>1.0</b></span></p>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+/* ---- Protocolo (espejo de docs/PROTOCOLO.md) ---- */
+const SERVICE_UUID = "2bef07a5-297a-4071-8eaa-1b5ad35bd18e";
+const STATE_UUID   = "f7ed213f-fcfc-418a-92d1-9b4d1ec14197";
+const CMD_UUID     = "92483b33-6ebf-4a0f-beb3-8ab946488f9c";
+const OP = { RELAY: 0x01, SETPOINT: 0x02, TIMER: 0x03, STOP: 0x04 };
+
+function decodeState(dv){
+  const t1 = dv.getInt16(0, true), t2 = dv.getInt16(2, true),
+        tm = dv.getUint16(7, true), mask = dv.getUint8(4);
+  return {
+    temp1: t1 === 0x7FFF ? null : t1 / 10,
+    temp2: t2 === 0x7FFF ? null : t2 / 10,
+    relays: [0,1,2,3].map(i => !!(mask & (1 << i))),
+    setpoint: dv.getInt16(5, true) / 10,
+    timerSec: tm === 0xFFFF ? null : tm,
+    errors: dv.getUint8(9)
+  };
+}
+const cmdRelay = (i, on) => Uint8Array.of(OP.RELAY, i, on ? 1 : 0);
+const cmdStop  = () => Uint8Array.of(OP.STOP);
+function cmdSetpoint(v){
+  const b = new DataView(new ArrayBuffer(3));
+  b.setUint8(0, OP.SETPOINT); b.setInt16(1, Math.round(v * 10), true);
+  return new Uint8Array(b.buffer);
+}
+function cmdTimer(sec){
+  const b = new DataView(new ArrayBuffer(3));
+  b.setUint8(0, OP.TIMER); b.setUint16(1, sec, true);
+  return new Uint8Array(b.buffer);
+}
+
+/* ---- Estado ---- */
+/* El equipo trabaja a 47 C constantes: la escala llega a 50 y ni un grado mas.
+   MAX_MIN es el tope de sesion, 30 minutos. AMBIENTE es a donde cae en reposo. */
+const MIN_T = 20, MAX_T = 50, N = 120, MAX_MIN = 30, AMBIENTE = 22;
+const S = {
+  temp1: 23.8, temp2: 22.9, setpoint: 40, relays: [false, false, false, false],
+  timerSec: null, errors: 0, connected: false
+};
+const H1 = [], H2 = [];
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch {} }
+};
+let timerTotal = +(store.get("tk.timerSec") || 0);
+
+/* Historial de arranque: el equipo esta en reposo, no viene de calentar. */
+(function seed(){
+  for (let i = 0; i < N; i++){
+    const t = 23.8 + Math.sin(i / 13) * 0.3 + Math.sin(i / 5) * 0.07;
+    H1.push(t); H2.push(t - 0.9 - Math.sin(i / 11) * 0.14);
+  }
+})();
+
+/* ---- Utilidades ---- */
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const pad2 = (n) => String(n).padStart(2, "0");
+const mmss = (sec) => {
+  const v = Math.max(0, Math.ceil(sec));
+  return pad2(Math.floor(v / 60)) + ":" + pad2(v % 60);
+};
+function tempColor(t){
+  const p = clamp((t - MIN_T) / (MAX_T - MIN_T), 0, 1);
+  const from = p < .52 ? "--c-cold" : "--c-mid";
+  const to   = p < .52 ? "--c-mid"  : "--c-hot";
+  const q = p < .52 ? p / .52 : (p - .52) / .48;
+  return `color-mix(in oklab, ${css(to)} ${(q * 100).toFixed(1)}%, ${css(from)})`;
+}
+let toastTimer;
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+/* ============ TEMPORIZADOR ============
+   El ESP32 es quien cuenta. Aquí solo se elige el total, se envía una vez,
+   y se dibuja lo que la placa reporta (o la simulación si no hay hardware). */
+const ROW = () => parseInt(css("--row"), 10) || 44;
+
+function buildColumn(el, max){
+  el.innerHTML = '<div class="pad"></div>'
+    + Array.from({ length: max + 1 }, (_, i) => `<b data-v="${i}">${pad2(i)}</b>`).join("")
+    + '<div class="pad"></div>';
+}
+function colValue(el){
+  return clamp(Math.round(el.scrollTop / ROW()), 0, el.querySelectorAll("b").length - 1);
+}
+function markColumn(el){
+  const v = colValue(el);
+  el.querySelectorAll("b").forEach((b, i) => b.toggleAttribute("data-sel", i === v));
+  el.setAttribute("aria-valuenow", v);
+  return v;
+}
+function setColumn(el, v, smooth){
+  el.scrollTo({ top: v * ROW(), behavior: smooth ? "smooth" : "auto" });
+  markColumn(el);
+}
+function pickedSeconds(){
+  return colValue($("tMins")) * 60 + colValue($("tSecs"));
+}
+/* 30:00 es el techo: al elegir el minuto 30 los segundos vuelven a cero. */
+function clampPick(){
+  if (colValue($("tMins")) === MAX_MIN && colValue($("tSecs")) !== 0) setColumn($("tSecs"), 0, true);
+}
+
+buildColumn($("tMins"), MAX_MIN);
+buildColumn($("tSecs"), 59);
+
+[$("tMins"), $("tSecs")].forEach(col => {
+  let raf = 0;
+  col.addEventListener("scroll", () => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => { raf = 0; markColumn(col); clampPick(); updateTimerHint(); });
+  }, { passive: true });
+  col.addEventListener("keydown", e => {
+    const max = col.querySelectorAll("b").length - 1;
+    if (e.key === "ArrowUp"){ e.preventDefault(); setColumn(col, clamp(colValue(col) - 1, 0, max), true); }
+    if (e.key === "ArrowDown"){ e.preventDefault(); setColumn(col, clamp(colValue(col) + 1, 0, max), true); }
+    clampPick();
+    updateTimerHint();
+  });
+});
+
+function updateTimerHint(){
+  if (S.timerSec !== null) return;
+  const t = pickedSeconds();
+  $("timerHint").textContent = t === 0 ? "sin límite" : "listo: " + mmss(t);
+}
+
+/* Iniciar no es solo el reloj: arranca la sesión entera — cuenta atrás y
+   calentamiento a la vez. Si venía de manual, la sesión reemplaza a lo que
+   hubiera. Detener corta las dos cosas. Es un solo gesto, como se pidió. */
+function startTimer(){
+  const total = pickedSeconds();
+  if (total === 0){ toast("Elige un tiempo mayor que cero"); return; }
+  timerTotal = total;
+  store.set("tk.timerSec", total);
+  S.timerSec = total;
+  S.relays[0] = true;
+  send(cmdTimer(total));
+  paint();
+  toast("Sesión iniciada");
+}
+function stopTimer(){
+  S.timerSec = null;
+  S.relays[0] = false;
+  send(cmdTimer(0));
+  paint();
+  toast("Sesión detenida");
+}
+
+$("timerBtn").addEventListener("click", () => {
+  const btn = $("timerBtn");
+  btn.classList.remove("pressed");
+  void btn.offsetWidth;          // reinicia la onda si se pulsa seguido
+  btn.classList.add("pressed");
+  if (S.timerSec === null) startTimer(); else stopTimer();
+});
+$("timerBtn").addEventListener("animationend", e => {
+  if (e.animationName === "tring") $("timerBtn").classList.remove("pressed");
+});
+
+/* ---- Salida unica (rele 0) ---- */
+$("powerBtn").addEventListener("click", () => {
+  if (S.timerSec !== null){ toast("Hay una sesión en marcha — usa Detener"); return; }
+  const btn = $("powerBtn");
+  btn.classList.remove("pressed");
+  void btn.offsetWidth;            // reinicia el anillo si se pulsa dos veces seguidas
+  btn.classList.add("pressed");
+  S.relays[0] = !S.relays[0];
+  send(cmdRelay(0, S.relays[0]));
+  paint();
+});
+$("powerBtn").addEventListener("animationend", e => {
+  if (e.animationName === "pb-ring") $("powerBtn").classList.remove("pressed");
+});
+
+/* ---- Pintado ---- */
+function paint(){
+  const t = S.temp1, sp = S.setpoint;
+  $("tempMain").textContent = t.toFixed(1);
+  $("spEcho").textContent = sp.toFixed(1) + " °C";
+  $("spValue").textContent = sp.toFixed(1);
+  $("targetLabel").textContent = sp.toFixed(1) + "°";
+  $("delta").textContent = Math.max(0, sp - t).toFixed(1) + " °C";
+  $("lg1").textContent = t.toFixed(1) + " °C";
+  const sinS2 = S.temp2 === null;
+  $("lg2").textContent = sinS2 ? "--" : S.temp2.toFixed(1) + " °C";
+  $("lg2").parentElement.classList.toggle("mudo", sinS2);
+
+  // clip-path y transform en vez de height y bottom: ambos van por GPU
+  const pTemp = clamp((t - MIN_T) / (MAX_T - MIN_T), 0, 1);
+  const pSet  = clamp((sp - MIN_T) / (MAX_T - MIN_T), 0, 1);
+  $("fill").style.clipPath = "inset(" + ((1 - pTemp) * 100).toFixed(2) + "% 0 0 0 round 15px)";
+  $("target").style.transform = "translateY(" + (-pSet * $("track").clientHeight).toFixed(1) + "px)";
+  $("track").setAttribute("aria-valuenow", sp.toFixed(1));
+  $("bulb").style.background = tempColor(t);
+
+  const anyOn = S.relays[0];
+  const heating = anyOn && t < sp - 0.4;
+  $("monitor").classList.toggle("heating", heating);
+  const chip = $("modeChip");
+  chip.dataset.mode = heating ? "heat" : anyOn ? "hold" : "idle";
+  $("modeText").textContent = heating ? "Calentando" : anyOn ? "Manteniendo" : "En reposo";
+
+  $("power").classList.toggle("on", anyOn);
+  $("powerBtn").setAttribute("aria-pressed", anyOn + "");
+  $("powerBtn").setAttribute("aria-label", anyOn ? "Apagar la salida" : "Encender la salida");
+  $("powerState").textContent = anyOn ? "Encendido" : "Apagado";
+
+  // Mientras cuenta el tiempo, el botón manual queda fuera de juego
+  const enSesion = S.timerSec !== null;
+  $("power").classList.toggle("bloqueada", enSesion);
+  $("powerBtn").disabled = enSesion;
+
+  /* Temporizador */
+  const running = S.timerSec !== null;
+  $("timerCard").classList.toggle("running", running);
+  $("tLabel").textContent = running ? "Detener" : "Iniciar";
+  $("timerBtn").setAttribute("aria-label", running ? "Detener el temporizador" : "Iniciar el temporizador");
+  if (running){
+    const rem = Math.max(0, S.timerSec);
+    $("tLive").textContent = mmss(rem);
+    $("timerHint").textContent = "quedan " + mmss(rem);
+    const done = timerTotal > 0 ? 1 - rem / timerTotal : 0;
+    $("tProg").style.transform = "scaleX(" + clamp(done, 0, 1).toFixed(4) + ")";
+  } else {
+    $("tProg").style.transform = "scaleX(0)";
+    updateTimerHint();
+  }
+
+  const errs = [];
+  if (S.errors & 1) errs.push("Fallo sensor 1");
+  if (S.errors & 2) errs.push("Fallo sensor 2");
+  if (S.errors & 4) errs.push("Sobretemperatura");
+  if (S.errors & 8) errs.push("Paro de emergencia");
+  $("alert").textContent = errs.join(" · ");
+  $("alert").classList.toggle("show", errs.length > 0);
+
+  drawChart();
+}
+
+function drawChart(){
+  const W = 320, Hh = 96, pad = 9;
+  // Con un solo sensor H2 va lleno de NaN: ni escala la vertical ni se dibuja
+  const hayS2 = H2.every(Number.isFinite);
+  const h2 = hayS2 ? H2 : [];
+  let lo = Math.min(...H1, ...h2, S.setpoint) - 1.5;
+  let hi = Math.max(...H1, ...h2, S.setpoint) + 1.5;
+  if (hi - lo < 8){ const m = (hi + lo) / 2; lo = m - 4; hi = m + 4; }
+  const y = v => pad + (hi - v) / (hi - lo) * (Hh - pad * 2);
+  const x = i => i / (N - 1) * W;
+  const d = a => a.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1)).join(" ");
+  const p1 = d(H1);
+  $("linePath1").setAttribute("d", p1);
+  $("linePath2").setAttribute("d", hayS2 ? d(H2) : "");
+  $("areaPath").setAttribute("d", p1 + " L" + W + " " + Hh + " L0 " + Hh + " Z");
+  const ys = y(S.setpoint).toFixed(1);
+  $("spPath").setAttribute("d", "M0 " + ys + " L" + W + " " + ys);
+  const tipPx = y(H1[H1.length - 1]) / Hh * $("tip").parentElement.clientHeight;
+  $("tip").style.transform = "translate(50%, calc(-50% + " + tipPx.toFixed(1) + "px))";
+}
+
+/* ---- Acciones ---- */
+function setSetpoint(v){
+  S.setpoint = clamp(Math.round(v * 2) / 2, MIN_T, MAX_T);
+  send(cmdSetpoint(S.setpoint));
+  document.querySelectorAll("#spChips .qc").forEach(c =>
+    c.setAttribute("aria-pressed", (+c.dataset.sp === S.setpoint) + ""));
+  paint();
+}
+$("spUp").onclick = () => setSetpoint(S.setpoint + 0.5);
+$("spDown").onclick = () => setSetpoint(S.setpoint - 0.5);
+document.querySelectorAll("#spChips .qc").forEach(c => c.onclick = () => setSetpoint(+c.dataset.sp));
+
+$("stopBtn").onclick = () => {
+  S.relays = [false, false, false, false];
+  S.timerSec = null;
+  send(cmdStop());
+  paint();
+  toast("Todo apagado");
+};
+
+const track = $("track");
+function pointToSetpoint(clientY){
+  const r = track.getBoundingClientRect();
+  setSetpoint(MIN_T + (1 - clamp((clientY - r.top) / r.height, 0, 1)) * (MAX_T - MIN_T));
+}
+track.addEventListener("pointerdown", e => {
+  track.setPointerCapture(e.pointerId);
+  track.classList.add("dragging");   // corta la transición: la línea sigue al dedo
+  pointToSetpoint(e.clientY);
+});
+["pointerup", "pointercancel"].forEach(ev =>
+  track.addEventListener(ev, () => track.classList.remove("dragging")));
+track.addEventListener("pointermove", e => {
+  if (e.buttons) pointToSetpoint(e.clientY);
+});
+track.addEventListener("keydown", e => {
+  if (e.key === "ArrowUp" || e.key === "ArrowRight"){ e.preventDefault(); setSetpoint(S.setpoint + 0.5); }
+  if (e.key === "ArrowDown" || e.key === "ArrowLeft"){ e.preventDefault(); setSetpoint(S.setpoint - 0.5); }
+});
+
+$("sensorName").addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); e.target.blur(); } });
+
+/* ---- Tema ----
+   El icono muestra a donde vas: luna en claro, sol en oscuro. Sin eleccion
+   guardada manda el sistema, y si el sistema cambia el icono cambia con el. */
+const themeBtn = $("themeBtn");
+const prefiereOscuro = matchMedia("(prefers-color-scheme: dark)");
+const temaOscuro = () => {
+  const t = document.documentElement.getAttribute("data-theme");
+  return t ? t === "dark" : prefiereOscuro.matches;
+};
+function paintThemeBtn(){
+  const oscuro = temaOscuro();
+  themeBtn.dataset.icon = oscuro ? "sun" : "moon";
+  themeBtn.setAttribute("aria-label", oscuro ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+}
+themeBtn.onclick = () => {
+  const next = temaOscuro() ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  store.set("tk.theme", next);
+  paintThemeBtn();
+  paint();
+};
+const savedTheme = store.get("tk.theme");
+if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+prefiereOscuro.addEventListener("change", () => { if (!store.get("tk.theme")) paintThemeBtn(); });
+paintThemeBtn();
+
+/* ---- Conexion BLE ---- */
+let device = null, cmdChar = null, huboHardware = false;
+function setPill(state, text){
+  $("pill").dataset.state = state;
+  $("pillText").textContent = text;
+}
+function send(bytes){
+  if (S.connected && cmdChar) cmdChar.writeValue(bytes).catch(() => toast("No se pudo enviar"));
+}
+function applyState(st){
+  const wasRunning = S.timerSec !== null;
+  // Sin lectura válida la app no inventa un número: conserva el último dato y
+  // deja hablar a la alerta de error. La placa ya abrió el relé por su cuenta.
+  if (st.temp1 === null) st.temp1 = S.temp1;
+  Object.assign(S, st);
+  // La placa manda: si trae un total mayor al que conocíamos, ajusta la referencia
+  if (S.timerSec !== null && (!wasRunning || S.timerSec > timerTotal)) timerTotal = S.timerSec;
+  H1.push(st.temp1); H1.shift();
+  // Sin segundo sensor entra NaN, no un valor inventado: la serie se esconde
+  H2.push(st.temp2 === null ? NaN : st.temp2); H2.shift();
+  paint();
+}
+/* Al caerse la conexión la app NO vuelve a simular si ya hubo equipo: congela
+   el último dato real y lo dice. Simular encima de datos reales es mentir, y
+   fue lo que hacía creer que el relé seguía encendido. */
+function onDisconnect(){
+  S.connected = false; cmdChar = null;
+  $("connectBtn").textContent = "Conectar";
+  if (huboHardware){
+    setPill("perdida", "Sin conexión · último dato");
+    toast("Se perdió la conexión — el equipo sigue solo");
+  } else {
+    setPill("demo", "Modo demostración");
+    toast("Termostato desconectado");
+  }
+}
+$("connectBtn").onclick = async () => {
+  if (S.connected){ device.gatt.disconnect(); return; }
+  if (!navigator.bluetooth){
+    toast("Usa Chrome, Edge o Bluefy en iPhone");
+    return;
+  }
+  setPill("wait", "Buscando termostato…");
+  try {
+    device = await navigator.bluetooth.requestDevice({ filters: [{ services: [SERVICE_UUID] }] });
+    device.addEventListener("gattserverdisconnected", onDisconnect);
+    const svc = await (await device.gatt.connect()).getPrimaryService(SERVICE_UUID);
+    cmdChar = await svc.getCharacteristic(CMD_UUID);
+    const stateChar = await svc.getCharacteristic(STATE_UUID);
+    await stateChar.startNotifications();
+    stateChar.addEventListener("characteristicvaluechanged", e => applyState(decodeState(e.target.value)));
+    S.connected = true;
+    huboHardware = true;
+    $("connectBtn").textContent = "Desconectar";
+    setPill("on", device.name || "Termoterapia TEO");
+    // El estado de la placa manda desde el primer instante: se lee una vez en
+    // vez de esperar al primer aviso, para que la app no enseñe nada suyo.
+    try { applyState(decodeState(await stateChar.readValue())); } catch (e) {}
+    toast("Conectado");
+  } catch (err) {
+    setPill("demo", "Modo demostración");
+    if (err.name !== "NotFoundError") toast("No se pudo conectar");
+  }
+};
+
+/* ---- Simulacion (solo sin hardware) ---- */
+setInterval(() => {
+  if (S.connected || huboHardware) return;
+  const on = S.relays[0];
+  const heating = on && S.temp1 < S.setpoint - 0.4;
+  S.temp1 += heating ? 0.34 + Math.random() * 0.1 : -((S.temp1 - AMBIENTE) * 0.012 + 0.015);
+  S.temp1 = clamp(S.temp1, 18, 55);
+  // El retorno sigue al tanque por detras, nunca por debajo del ambiente
+  S.temp2 = AMBIENTE + (S.temp1 - AMBIENTE) * 0.74 - Math.random() * 0.25;
+  H1.push(S.temp1); H1.shift();
+  H2.push(S.temp2); H2.shift();
+  paint();
+}, 700);
+
+/* La cuenta atras va aparte y a segundo de reloj. Con la placa delante la
+   lleva el ESP32; esto solo corre cuando no hay hardware conectado. */
+setInterval(() => {
+  if (S.connected || huboHardware || S.timerSec === null) return;
+  S.timerSec = Math.max(0, S.timerSec - 1);
+  if (S.timerSec === 0){
+    S.relays = [false, false, false, false];
+    S.timerSec = null;
+    toast("Temporizador terminado");
+  }
+  paint();
+}, 1000);
+
+/* ---- Arranque ---- */
+setColumn($("tMins"), clamp(Math.floor(timerTotal / 60), 0, MAX_MIN), false);
+setColumn($("tSecs"), timerTotal % 60, false);
+setSetpoint(40);
+paint();
+
+/* Cada seccion entra al asomarse: el poco scroll que queda las separa en vez
+   de arrastrarlas en bloque. La clase la pone el JS, asi que si esto no corre
+   la app se ve entera igual. */
+if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+  const io = new IntersectionObserver((items) => {
+    items.forEach(it => {
+      if (!it.isIntersecting) return;
+      it.target.classList.add("seen");
+      io.unobserve(it.target);
+    });
+  }, { threshold: .12, rootMargin: "0px 0px -6% 0px" });
+  document.querySelectorAll(".card, .stop, .foot").forEach(el => {
+    // Lo que ya se ve al abrir entra con la app: solo se reserva para el scroll
+    if (el.getBoundingClientRect().top < innerHeight * 0.92){
+      el.classList.add("reveal", "seen");
+      return;
+    }
+    el.classList.add("reveal");
+    io.observe(el);
+  });
+}
+
+/* Service worker: solo sirve por http(s). Con file:// se ignora sin ruido. */
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")){
+  addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
