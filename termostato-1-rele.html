@@ -553,11 +553,6 @@ button{font-family:inherit;color:inherit;cursor:pointer}
   .stop:hover{background:color-mix(in srgb,var(--stop) 16%,transparent);transform:translateY(-1px)}
 }
 .foot{display:flex;flex-direction:column;align-items:center;gap:9px;margin-top:2px}
-.note{
-  font-size:11.5px;line-height:1.65;color:var(--muted);text-align:center;
-  margin:0 6px;text-wrap:balance;
-}
-.note code{font-family:var(--mono);font-size:10.5px}
 .sig{
   margin:0;display:flex;align-items:center;gap:9px;
   font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:650;
@@ -579,6 +574,21 @@ button{font-family:inherit;color:inherit;cursor:pointer}
   color:var(--stop);font-size:12.5px;font-weight:600;
 }
 .alert.show{display:flex}
+
+/* Con el mando en el equipo la app pasa a ser un visor. Se dice claro y se
+   apagan los controles: dejar botones que no hacen nada es peor que quitarlos. */
+.local{
+  display:none;gap:9px;align-items:center;padding:11px 14px;border-radius:14px;
+  background:var(--chip);border:1px solid var(--line);
+  color:var(--ink-2);font-size:12.5px;line-height:1.45;
+}
+.local.show{display:flex}
+.local svg{width:16px;height:16px;flex:none;color:var(--azul)}
+.local b{color:var(--ink)}
+.solo-mirar .power-btn,.solo-mirar .tbtn,.solo-mirar .step,
+.solo-mirar .qc,.solo-mirar .stop{opacity:.42;cursor:not-allowed;filter:grayscale(.45)}
+.solo-mirar .power-btn:active,.solo-mirar .tbtn:active,.solo-mirar .stop:active{transform:none}
+.solo-mirar .track{cursor:not-allowed}
 
 /* ============ SPLASH · Sello ============
    Índigo constante en los dos temas: continúa el icono de la app. */
@@ -674,6 +684,11 @@ button{font-family:inherit;color:inherit;cursor:pointer}
   </div>
 
   <div class="alert span-all" id="alert"></div>
+
+  <div class="local span-all" id="local">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span id="localTxt"></span>
+  </div>
 
   <section class="card monitor" id="monitor">
     <div class="monitor-head">
@@ -805,10 +820,6 @@ button{font-family:inherit;color:inherit;cursor:pointer}
   </button>
 
   <footer class="foot span-all">
-    <p class="note">
-      El rel&eacute; y el temporizador los regula el ESP32-C3; la app solo env&iacute;a &oacute;rdenes por Bluetooth.
-      Protocolo en <code>docs/PROTOCOLO.md</code>. En iPhone abre este enlace con la app <b>Bluefy</b>.
-    </p>
     <p class="sig"><span>RPI Ingenier&iacute;a</span><i></i><span>Versi&oacute;n <b>1.0</b></span></p>
   </footer>
 </div>
@@ -833,7 +844,11 @@ function decodeState(dv){
     relays: [0,1,2,3].map(i => !!(mask & (1 << i))),
     setpoint: dv.getInt16(5, true) / 10,
     timerSec: tm === 0xFFFF ? null : tm,
-    errors: dv.getUint8(9)
+    errors: dv.getUint8(9),
+    // v1.3: byte 11. 0 = sin elegir todavia, 1 = manda el equipo, 2 = manda la app.
+    // Un equipo de la v1.2 solo manda 10 bytes: ese no tiene pantalla, asi que
+    // el mando es siempre de la app. Por eso el valor por defecto es 2.
+    owner: dv.byteLength > 10 ? dv.getUint8(10) : 2
   };
 }
 const cmdRelay = (i, on) => Uint8Array.of(OP.RELAY, i, on ? 1 : 0);
@@ -855,8 +870,18 @@ function cmdTimer(sec){
 const MIN_T = 20, MAX_T = 50, N = 120, MAX_MIN = 30, AMBIENTE = 22;
 const S = {
   temp1: 23.8, temp2: 22.9, setpoint: 40, relays: [false, false, false, false],
-  timerSec: null, errors: 0, connected: false
+  timerSec: null, errors: 0, connected: false, owner: 0
 };
+
+/* El equipo hibrido elige dueno al arrancar. Mientras el mando no sea de la
+   app, sus ordenes serian descartadas por el firmware: asi que ni se envian y
+   los controles se apagan. En demostracion (sin conectar) esto es siempre
+   falso y la app sigue jugable como hasta ahora. */
+function appSinMando(){ return S.connected && S.owner !== 2; }
+function avisoLocal(){
+  toast(S.owner === 1 ? "El equipo tiene el control local"
+                      : "Elige BLUETOOTH en la pantalla del equipo");
+}
 const H1 = [], H2 = [];
 const store = {
   get(k){ try { return localStorage.getItem(k); } catch { return null; } },
@@ -952,6 +977,7 @@ function updateTimerHint(){
    calentamiento a la vez. Si venía de manual, la sesión reemplaza a lo que
    hubiera. Detener corta las dos cosas. Es un solo gesto, como se pidió. */
 function startTimer(){
+  if (appSinMando()){ avisoLocal(); return; }
   const total = pickedSeconds();
   if (total === 0){ toast("Elige un tiempo mayor que cero"); return; }
   timerTotal = total;
@@ -963,6 +989,7 @@ function startTimer(){
   toast("Sesión iniciada");
 }
 function stopTimer(){
+  if (appSinMando()){ avisoLocal(); return; }
   S.timerSec = null;
   S.relays[0] = false;
   send(cmdTimer(0));
@@ -983,6 +1010,7 @@ $("timerBtn").addEventListener("animationend", e => {
 
 /* ---- Salida unica (rele 0) ---- */
 $("powerBtn").addEventListener("click", () => {
+  if (appSinMando()){ avisoLocal(); return; }
   if (S.timerSec !== null){ toast("Hay una sesión en marcha — usa Detener"); return; }
   const btn = $("powerBtn");
   btn.classList.remove("pressed");
@@ -1032,7 +1060,22 @@ function paint(){
   // Mientras cuenta el tiempo, el botón manual queda fuera de juego
   const enSesion = S.timerSec !== null;
   $("power").classList.toggle("bloqueada", enSesion);
-  $("powerBtn").disabled = enSesion;
+
+  // Y si el mando lo tiene el equipo, queda fuera de juego la app entera
+  const soloMirar = appSinMando();
+  document.body.classList.toggle("solo-mirar", soloMirar);
+  $("local").classList.toggle("show", soloMirar);
+  if (soloMirar){
+    $("localTxt").innerHTML = S.owner === 1
+      ? "<b>El equipo tiene el control.</b> Desde aqu\u00ed solo se mira. Para mandar desde el m\u00f3vil, elige <b>BLUETOOTH</b> en la pantalla del equipo."
+      : "<b>Falta elegir qui\u00e9n manda.</b> En la pantalla del equipo, elige <b>BLUETOOTH</b> para poder controlarlo desde aqu\u00ed.";
+  }
+  $("powerBtn").disabled = enSesion || soloMirar;
+  $("timerBtn").disabled = soloMirar;
+  $("spUp").disabled     = soloMirar;
+  $("spDown").disabled   = soloMirar;
+  $("stopBtn").disabled  = soloMirar;
+  document.querySelectorAll("#spChips .qc").forEach(c => c.disabled = soloMirar);
 
   /* Temporizador */
   const running = S.timerSec !== null;
@@ -1084,6 +1127,7 @@ function drawChart(){
 
 /* ---- Acciones ---- */
 function setSetpoint(v){
+  if (appSinMando()){ avisoLocal(); return; }
   S.setpoint = clamp(Math.round(v * 2) / 2, MIN_T, MAX_T);
   send(cmdSetpoint(S.setpoint));
   document.querySelectorAll("#spChips .qc").forEach(c =>
@@ -1095,6 +1139,7 @@ $("spDown").onclick = () => setSetpoint(S.setpoint - 0.5);
 document.querySelectorAll("#spChips .qc").forEach(c => c.onclick = () => setSetpoint(+c.dataset.sp));
 
 $("stopBtn").onclick = () => {
+  if (appSinMando()){ avisoLocal(); return; }
   S.relays = [false, false, false, false];
   S.timerSec = null;
   send(cmdStop());
@@ -1157,6 +1202,7 @@ function setPill(state, text){
   $("pillText").textContent = text;
 }
 function send(bytes){
+  if (appSinMando()) return;          // el firmware lo descartaria igual
   if (S.connected && cmdChar) cmdChar.writeValue(bytes).catch(() => toast("No se pudo enviar"));
 }
 function applyState(st){

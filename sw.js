@@ -3,7 +3,7 @@
    No cachea nada del ESP32 — el BLE no pasa por aquí.
    Al cambiar cualquier HTML, sube CACHE para forzar la actualización. */
 
-const CACHE = "tk-termostato-v4";
+const CACHE = "tk-termostato-v5";
 
 const ASSETS = [
   "./",
