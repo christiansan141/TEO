@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ozonocleaner TEO · Propuesta 1 · Panel</title>
+<meta name="description" content="Propuesta 1: panel de una sola pantalla, en la línea de Teo. Área con plano, salida central y programación al pie.">
+<meta name="theme-color" content="#2E2A5C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Crect width=%22512%22 height=%22512%22 rx=%22114%22 fill=%22%232E2A5C%22/%3E%3Cg transform=%22translate%28107.51 75.06%29 scale%280.32%29%22%3E%3Cdefs%3E%3ClinearGradient id=%22ik%22 x1=%22421.29%22 y1=%22375.97%22 x2=%22908.96%22 y2=%22375.97%22 gradientUnits=%22userSpaceOnUse%22%3E%3Cstop offset=%220%22 stop-color=%22%236E9FDD%22/%3E%3Cstop offset=%22.64%22 stop-color=%22%239AC0F2%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon fill=%22%23FFFFFF%22 points=%22246.71 639.26 246.71 143.38 50.36 143.38 50.36 0 622.95 0 622.95 143.38 427.52 143.38 427.52 639.26 246.71 639.26%22/%3E%3Cg transform=%22translate%28-17.54 -56.34%29%22%3E%3Cpolygon fill=%22url%28%23ik%29%22 points=%22908.96 695.6 634.65 339.57 894.35 56.34 696.18 56.34 421.3 351.31 421.3 564.81 515.83 463.52 698.92 695.6 908.96 695.6%22/%3E%3Cpath fill=%22%238F93A3%22 d=%22M463.23%2C765.85c-215.43%2C0-390.07-106.11-390.07-237%2C0-73.42%2C55-139%2C141.21-182.5-97.1%2C43.11-160.19%2C112.8-160.19%2C191.46%2C0%2C130.89%2C174.65%2C237%2C390.08%2C237%2C94.6%2C0%2C181.33-20.46%2C248.86-54.5-64.47%2C28.63-143.92%2C45.54-229.89%2C45.54%22/%3E%3C/g%3E%3C/g%3E%3Cg stroke=%22%234FD8CC%22 stroke-width=%228.3%22 stroke-linecap=%22round%22 fill=%22none%22%3E%3Cline x1=%22256.0%22 y1=%22353.8%22 x2=%22206.6%22 y2=%22414.6%22/%3E%3Cline x1=%22256.0%22 y1=%22353.8%22 x2=%22305.4%22 y2=%22414.6%22/%3E%3C/g%3E%3Ccircle cx=%22256.0%22 cy=%22353.8%22 r=%2221.8%22 fill=%22%234FD8CC%22 fill-opacity=%221%22/%3E%3Ccircle cx=%22206.6%22 cy=%22414.6%22 r=%2221.8%22 fill=%22%234FD8CC%22 fill-opacity=%221%22/%3E%3Ccircle cx=%22305.4%22 cy=%22414.6%22 r=%2221.8%22 fill=%22%234FD8CC%22 fill-opacity=%221%22/%3E%3C/svg%3E">
+<style>
+:root{
+  --r:20px;
+  --row:40px;
+  --sans:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,"Helvetica Neue",sans-serif;
+  --mono:"Cascadia Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --ground:#E9EDF6;
+  --surface:#FFFFFF;
+  --surface-2:#F2F5FC;
+  --line:#DBE2F0;
+  --line-soft:#EAEEF7;
+  --ink:#231F20;
+  --ink-2:#565B6C;
+  --muted:#8A91A6;
+  --chip:#EDF1FA;
+  --azul:#1D71B8;
+  --indigo:#2E2A5C;
+  --indigo-fill:#2E2A5C;
+  --o3:#08807D;
+  --o3-deep:#05595C;
+  --o3-glow:#12A099;
+  --o3-bg:rgba(8,128,125,.13);
+  --on-o3:#FFFFFF;
+  --aviso:#B96A12;
+  --aviso-bg:rgba(232,149,44,.16);
+  --ok:#1B8F62;
+  --ok-bg:rgba(27,143,98,.12);
+  --stop:#B23A2B;
+  --stop-bg:rgba(178,58,43,.09);
+  --lg-blue:#3466AE;
+  --lg-k1:#29265B;
+  --lg-k2:#2E2B7A;
+  --lg-arc:#313132;
+  --shadow:0 22px 50px -30px rgba(46,42,92,.55), 0 1px 2px rgba(46,42,92,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E0E22;
+    --surface:#191934;
+    --surface-2:#212143;
+    --line:#2D2D55;
+    --line-soft:#242449;
+    --ink:#EDEFF8;
+    --ink-2:#AEB4CB;
+    --muted:#7B8299;
+    --chip:#242449;
+    --azul:#57A3E4;
+    --indigo:#9A92F0;
+    --indigo-fill:#2E2A5C;
+    --o3:#4FD8CC;
+    --o3-deep:#16716F;
+    --o3-glow:#2FB5AC;
+    --o3-bg:rgba(79,216,204,.15);
+    --on-o3:#062B2A;
+    --aviso:#F2A83F;
+    --aviso-bg:rgba(242,168,63,.16);
+    --ok:#3EC38C;
+    --ok-bg:rgba(62,195,140,.14);
+    --stop:#E0705F;
+    --stop-bg:rgba(224,112,95,.12);
+    --lg-blue:#7FAEE8;
+    --lg-k1:#8F8AE6;
+    --lg-k2:#A9A2F5;
+    --lg-arc:#8A90A6;
+    --shadow:0 24px 60px -34px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E0E22;
+  --surface:#191934;
+  --surface-2:#212143;
+  --line:#2D2D55;
+  --line-soft:#242449;
+  --ink:#EDEFF8;
+  --ink-2:#AEB4CB;
+  --muted:#7B8299;
+  --chip:#242449;
+  --azul:#57A3E4;
+  --indigo:#9A92F0;
+  --indigo-fill:#2E2A5C;
+  --o3:#4FD8CC;
+  --o3-deep:#16716F;
+  --o3-glow:#2FB5AC;
+  --o3-bg:rgba(79,216,204,.15);
+  --on-o3:#062B2A;
+  --aviso:#F2A83F;
+  --aviso-bg:rgba(242,168,63,.16);
+  --ok:#3EC38C;
+  --ok-bg:rgba(62,195,140,.14);
+  --stop:#E0705F;
+  --stop-bg:rgba(224,112,95,.12);
+  --lg-blue:#7FAEE8;
+  --lg-k1:#8F8AE6;
+  --lg-k2:#A9A2F5;
+  --lg-arc:#8A90A6;
+  --shadow:0 24px 60px -34px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:
+    radial-gradient(1100px 520px at 50% -12%, color-mix(in srgb, var(--surface) 70%, transparent), transparent 70%),
+    var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;min-height:100dvh;
+  padding:13px 14px 26px;
+  padding-left:max(14px, env(safe-area-inset-left));
+  padding-right:max(14px, env(safe-area-inset-right));
+  padding-bottom:max(26px, env(safe-area-inset-bottom));
+}
+button{font-family:inherit;color:inherit;cursor:pointer}
+input{font-family:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--azul);outline-offset:3px;border-radius:6px}
+[hidden]{display:none !important}
+
+.app{max-width:472px;margin-inline:auto;display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.mono{font-family:var(--mono)}
+
+/* ---- Encabezado ---- */
+.topbar{display:flex;align-items:center;gap:11px;padding:2px 4px}
+.mark{width:44px;height:37px;flex:none}
+.titles{display:flex;flex-direction:column;gap:2px;margin-right:auto;min-width:0}
+.titles h1{margin:0;font-size:19.5px;font-weight:650;letter-spacing:-.015em;line-height:1.12}
+.titles h1 b{font-weight:650;color:var(--o3)}
+.brandline{font-size:11px;color:var(--muted);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{
+  width:36px;height:36px;border-radius:11px;border:1px solid var(--line);
+  background:var(--surface);display:grid;place-items:center;color:var(--ink-2);
+  transition:border-color .18s, color .18s, transform .18s;
+}
+.icon-btn svg{width:17px;height:17px}
+.theme-btn svg{grid-area:1 / 1;transition:opacity .24s ease, transform .42s cubic-bezier(.22,1,.36,1)}
+.theme-btn .i-sun{opacity:0;transform:rotate(-80deg) scale(.5)}
+.theme-btn .i-moon{opacity:0;transform:rotate(80deg) scale(.5)}
+.theme-btn[data-icon="sun"] .i-sun,
+.theme-btn[data-icon="moon"] .i-moon{opacity:1;transform:none}
+
+/* ---- Conexion ---- */
+.connbar{display:flex;align-items:center;gap:10px;padding:2px 4px}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 11px 6px 9px;border-radius:999px;
+  background:var(--chip);border:1px solid var(--line-soft);font-size:12px;font-weight:560;color:var(--ink-2);margin-right:auto;
+}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none}
+.pill[data-state="demo"] .dot{background:var(--indigo);box-shadow:0 0 0 3px color-mix(in srgb,var(--indigo) 22%,transparent)}
+.pill[data-state="on"] .dot{background:var(--ok);box-shadow:0 0 0 3px var(--ok-bg)}
+.pill[data-state="wait"] .dot{background:var(--aviso);animation:blink 1s infinite}
+.pill[data-state="perdida"]{color:var(--stop)}
+.pill[data-state="perdida"] .dot{background:var(--stop);box-shadow:0 0 0 3px var(--stop-bg)}
+@keyframes blink{50%{opacity:.25}}
+.btn{
+  border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:12px;
+  font-size:13.5px;font-weight:600;
+  transition:transform .16s, box-shadow .16s, background .16s, border-color .16s;
+}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{
+  background:linear-gradient(140deg,var(--o3),color-mix(in srgb,var(--o3) 45%,var(--azul)));
+  border-color:transparent;color:var(--on-o3);
+  box-shadow:0 10px 22px -12px color-mix(in srgb,var(--o3) 90%,transparent);
+}
+.btn-ghost{background:transparent}
+.btn-danger{color:var(--stop);border-color:color-mix(in srgb,var(--stop) 40%,var(--line));background:var(--stop-bg)}
+
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:650;
+  letter-spacing:.01em;background:var(--chip);color:var(--ink-2);transition:background .25s, color .25s;
+}
+.chip i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.chip[data-mode="run"]{background:var(--o3-bg);color:var(--o3)}
+.chip[data-mode="idle"]{background:var(--chip);color:var(--ink-2)}
+
+.alert,.local{display:none;gap:9px;align-items:center;padding:11px 14px;border-radius:14px;font-size:12.5px;line-height:1.45}
+.alert{background:var(--stop-bg);border:1px solid color-mix(in srgb,var(--stop) 35%,transparent);color:var(--stop);font-weight:600}
+.local{background:var(--chip);border:1px solid var(--line);color:var(--ink-2)}
+.alert.show,.local.show{display:flex}
+.local svg{width:16px;height:16px;flex:none;color:var(--azul)}
+.local b{color:var(--ink)}
+.solo-mirar [data-cmd]{opacity:.42;cursor:not-allowed;filter:grayscale(.45)}
+.solo-mirar [data-cmd]:active{transform:none}
+
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
+  background:var(--indigo-fill);color:#fff;padding:10px 18px;border-radius:999px;
+  font-size:13px;font-weight:600;opacity:0;pointer-events:none;
+  transition:opacity .25s, transform .25s;z-index:80;
+  box-shadow:0 16px 30px -18px rgba(0,0,0,.8);max-width:calc(100vw - 32px);text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.arriba{bottom:auto !important;top:16px;transform:translate(-50%,-20px)}
+.toast.arriba.show{transform:translate(-50%,0)}
+
+/* ---- Pie ---- */
+.foot{display:flex;flex-direction:column;align-items:center;gap:9px;margin-top:2px}
+.sig{margin:0;display:flex;align-items:center;gap:9px;font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:650;color:var(--muted);opacity:.85}
+.sig i{width:3px;height:3px;border-radius:50%;background:currentColor;flex:none;opacity:.6}
+.sig b{font-family:var(--mono);font-weight:600;letter-spacing:.05em}
+
+/* ---- Paro total ---- */
+.stop{
+  display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:12px;border-radius:16px;
+  border:1px solid color-mix(in srgb,var(--stop) 40%,var(--line));background:var(--stop-bg);color:var(--stop);
+  font-size:14px;font-weight:680;transition:background .18s, transform .16s;
+}
+.stop svg{width:17px;height:17px}
+
+/* ---- Controles pequeños ---- */
+.step{
+  width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);
+  font-size:21px;font-weight:300;line-height:1;display:grid;place-items:center;color:var(--ink);
+  transition:background .16s, border-color .16s, transform .12s;flex:none;
+}
+.step:active{transform:scale(.97)}
+.qc{
+  border:1px solid var(--line);background:transparent;color:var(--ink-2);padding:7px 13px;border-radius:999px;
+  font-size:12.5px;font-weight:600;transition:border-color .16s ease, color .16s ease, background .16s ease;
+}
+.qc[aria-pressed="true"]{background:var(--o3-bg);border-color:var(--o3);color:var(--o3)}
+.qc small{font-family:var(--mono);font-weight:500;opacity:.75;margin-left:4px;font-size:10.5px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--surface-2);border:1px solid var(--line);border-radius:13px;padding:3px;gap:3px}
+.seg button{border:0;background:transparent;border-radius:10px;padding:8px 10px;font-size:12.5px;font-weight:650;color:var(--ink-2);transition:background .18s,color .18s}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--o3);box-shadow:0 1px 3px rgba(46,42,92,.18)}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.days button{
+  aspect-ratio:1;border-radius:12px;border:1px solid var(--line);background:transparent;
+  font-size:12.5px;font-weight:650;color:var(--ink-2);transition:all .16s ease;
+}
+.days button[aria-pressed="true"]{background:var(--o3-bg);border-color:var(--o3);color:var(--o3)}
+.switch{
+  position:relative;width:42px;height:25px;border-radius:999px;border:1px solid var(--line);
+  background:var(--surface-2);flex:none;padding:0;transition:background .2s, border-color .2s;
+}
+.switch::after{
+  content:"";position:absolute;left:2px;top:2px;width:19px;height:19px;border-radius:50%;
+  background:var(--muted);transition:transform .22s cubic-bezier(.22,1,.36,1), background .2s;
+}
+.switch[aria-checked="true"]{background:var(--o3-bg);border-color:var(--o3)}
+.switch[aria-checked="true"]::after{transform:translateX(17px);background:var(--o3)}
+.field{display:flex;flex-direction:column;gap:7px}
+.txt{
+  width:100%;padding:11px 13px;border-radius:13px;border:1px solid var(--line);background:var(--surface-2);
+  font-size:14px;color:var(--ink);outline:none;color-scheme:light dark;
+}
+.txt:focus{border-color:var(--o3)}
+:root[data-theme="dark"] .txt{color-scheme:dark}
+:root[data-theme="light"] .txt{color-scheme:light}
+
+/* ---- Selector de area ---- */
+.ap{display:flex;flex-direction:column;gap:11px}
+.ap-row{display:flex;align-items:center;gap:12px}
+.ap-val{flex:1;text-align:center;font-size:30px;font-weight:330;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ap-val small{font-size:14px;color:var(--ink-2);font-weight:450;margin-left:3px}
+.ap-sub{font-size:11.5px;color:var(--muted);text-align:center;font-family:var(--mono)}
+input[type=range].ap-range{
+  -webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;margin:0;touch-action:pan-y;
+  --p:0%;
+}
+.ap-range::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--o3) var(--p),var(--line) var(--p))}
+.ap-range::-moz-range-track{height:6px;border-radius:6px;background:var(--line)}
+.ap-range::-moz-range-progress{height:6px;border-radius:6px;background:var(--o3)}
+.ap-range::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;margin-top:-9px;background:var(--surface);border:3px solid var(--o3);box-shadow:0 4px 10px -3px rgba(0,0,0,.4)}
+.ap-range::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--surface);border:3px solid var(--o3)}
+
+/* ---- Rueda de hora (heredada de Teo) ---- */
+.tpick{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;height:calc(var(--row) * 3)}
+.tband{position:absolute;left:8px;right:8px;top:50%;transform:translateY(-50%);height:var(--row);border-radius:13px;background:var(--surface-2);border:1px solid var(--line);pointer-events:none}
+.tpick::before,.tpick::after{content:"";position:absolute;left:0;right:0;height:var(--row);pointer-events:none;z-index:2}
+.tpick::before{top:0;background:linear-gradient(var(--surface),transparent)}
+.tpick::after{bottom:0;background:linear-gradient(transparent,var(--surface))}
+.tcol{position:relative;z-index:1;width:82px;height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none;-ms-overflow-style:none;text-align:center;touch-action:pan-y}
+.tcol::-webkit-scrollbar{display:none}
+.tcol .pad{height:var(--row)}
+.tcol b{display:block;height:var(--row);line-height:var(--row);scroll-snap-align:center;font-size:31px;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:-.02em;color:var(--muted);transition:color .18s ease, transform .18s ease}
+.tcol b[data-sel]{color:var(--ink);transform:scale(1.04)}
+.tsep{font-size:29px;font-weight:250;color:var(--ink-2);padding-bottom:3px;position:relative;z-index:3}
+
+/* ---- Boton de salida (ozono) ---- */
+.power-btn{
+  position:relative;display:grid;place-items:center;width:130px;height:130px;border:0;padding:0;background:none;border-radius:50%;
+  -webkit-tap-highlight-color:transparent;transition:transform .18s cubic-bezier(.22,1,.36,1);
+}
+.power-btn>*{grid-area:1 / 1}
+.power-btn:active{transform:scale(.965)}
+.power-btn:focus-visible{outline:2px solid var(--azul);outline-offset:6px;border-radius:50%}
+.pb-rim{width:130px;height:130px;border-radius:50%;pointer-events:none;border:1px solid var(--line-soft);transition:border-color .32s ease}
+.on .pb-rim{border-color:color-mix(in srgb,var(--o3) 40%,transparent)}
+.pb-disc{
+  width:112px;height:112px;border-radius:50%;background:linear-gradient(158deg,var(--surface),var(--surface-2));
+  border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 14px 28px -20px rgba(46,42,92,.9);
+  transition:background .32s ease, border-color .32s ease, box-shadow .32s ease;overflow:hidden;position:relative;
+}
+.on .pb-disc{
+  background:radial-gradient(120% 120% at 32% 16%, color-mix(in srgb,var(--o3-glow) 80%,#fff), transparent 60%),
+             linear-gradient(150deg,var(--o3-glow),var(--o3-deep));
+  border-color:transparent;
+  box-shadow:0 22px 44px -18px color-mix(in srgb,var(--o3-glow) 95%,transparent), inset 0 1px 0 rgba(255,255,255,.32);
+}
+.pb-halo{width:112px;height:112px;border-radius:50%;background:var(--o3-bg);opacity:0;pointer-events:none}
+.on .pb-halo{animation:pb-pulse 2.6s ease-in-out infinite}
+@keyframes pb-pulse{0%,100%{transform:scale(1);opacity:0}45%{transform:scale(1.3);opacity:1}}
+.pb-ring{width:112px;height:112px;border-radius:50%;pointer-events:none;border:2px solid color-mix(in srgb,var(--o3) 55%,transparent);transform:scale(.55);opacity:0}
+.power-btn.pressed .pb-ring{animation:pb-ring 520ms cubic-bezier(.22,1,.36,1)}
+@keyframes pb-ring{0%{transform:scale(.55);opacity:.85}100%{transform:scale(1.36);opacity:0}}
+.pb-icon{width:40px;height:40px;color:var(--ink-2);transition:color .32s ease, transform .32s cubic-bezier(.22,1,.36,1);z-index:2}
+.on .pb-icon{color:#fff;transform:scale(1.06)}
+.power-state{
+  display:flex;align-items:center;gap:9px;font-size:18px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);transition:color .32s ease;
+}
+.power-state i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.45;flex:none;transition:opacity .32s ease, box-shadow .32s ease}
+.on .power-state{color:var(--o3)}
+.on .power-state i{opacity:1;box-shadow:0 0 0 4px var(--o3-bg)}
+
+/* ---- Burbujas de ozono ---- */
+.bub{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:inherit}
+.bub i{
+  position:absolute;bottom:-14px;border-radius:50%;border:1.5px solid var(--o3-glow);opacity:0;
+  width:var(--s);height:var(--s);left:var(--x);
+  animation:rise var(--d) linear var(--dl) infinite;animation-play-state:paused;
+}
+.on .bub i,.bub.live i{animation-play-state:running}
+@keyframes rise{
+  0%{transform:translate(0,0) scale(.6);opacity:0}
+  15%{opacity:.75}
+  60%{transform:translate(var(--dx),calc(var(--h) * -.6)) scale(.9)}
+  100%{transform:translate(0,calc(var(--h) * -1)) scale(1.1);opacity:0}
+}
+
+/* ---- Filas de programación ---- */
+.srow{display:flex;align-items:center;gap:13px;padding:11px 4px;border-top:1px solid var(--line-soft);cursor:pointer;transition:opacity .2s}
+.srow:first-child{border-top:0}
+.srow .t{font-family:var(--mono);font-size:19px;font-weight:500;letter-spacing:-.02em;min-width:56px;font-variant-numeric:tabular-nums}
+.srow .m{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.srow .m b{font-size:13.5px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow .m span{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow.off .t,.srow.off .m{opacity:.45}
+.vacio{font-size:12.5px;color:var(--muted);text-align:center;padding:14px 8px;line-height:1.5}
+.cfg{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
+.cfg-h{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-2)}
+.cfg-h b{color:var(--ink);font-weight:600}
+.cfg-nota{margin:6px 0 0;font-size:11px;color:var(--muted);line-height:1.5}
+
+/* ---- Anillo de progreso ---- */
+.ring-svg{display:block;transform:rotate(-90deg)}
+.ring-svg circle{fill:none;stroke-width:7;stroke-linecap:round}
+.ring-svg .bg{stroke:var(--line)}
+.ring-svg .fg{stroke:var(--o3);stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset .8s linear, stroke .3s}
+
+/* ---- Hoja inferior ---- */
+.sheet-back{position:fixed;inset:0;background:rgba(10,10,30,.5);opacity:0;transition:opacity .24s ease;z-index:60}
+.sheet-back.show{opacity:1}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:61;margin-inline:auto;max-width:520px;max-height:92dvh;
+  background:var(--surface);border:1px solid var(--line);border-bottom:0;border-radius:24px 24px 0 0;
+  box-shadow:0 -30px 60px -30px rgba(0,0,0,.6);
+  transform:translateY(104%);transition:transform .32s cubic-bezier(.22,1,.36,1);
+  display:flex;flex-direction:column;
+}
+.sheet.show{transform:none}
+.sheet-grip{width:38px;height:4px;border-radius:4px;background:var(--line);margin:9px auto 0;flex:none}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 4px}
+.sheet-head b{font-size:16px;font-weight:650}
+.sheet-body{padding:8px 18px max(20px,env(safe-area-inset-bottom));overflow-y:auto;display:flex;flex-direction:column;gap:16px}
+.sheet-actions{display:flex;gap:10px}
+.sheet-actions .btn{flex:1;padding:12px}
+.resumen{font-size:12.5px;color:var(--ink-2);text-align:center;padding:9px 12px;border-radius:12px;background:var(--o3-bg)}
+.resumen b{color:var(--o3);font-weight:700}
+@media (min-width:760px){
+  .sheet{top:50%;bottom:auto;border-bottom:1px solid var(--line);border-radius:24px;transform:translateY(-46%);opacity:0;transition:transform .3s cubic-bezier(.22,1,.36,1), opacity .2s}
+  .sheet.show{transform:translateY(-50%);opacity:1}
+}
+
+/* ---- Splash ---- */
+#splash{
+  position:fixed;inset:0;z-index:100;display:grid;place-items:center;
+  background:linear-gradient(160deg,#2E2A5C,#1B1840);
+  animation:sp-out 200ms cubic-bezier(.23,1,.32,1) 900ms forwards;
+  --lg-blue:#FFFFFF;--lg-k1:#6E9FDD;--lg-k2:#9AC0F2;--lg-arc:#8F93A3;
+}
+#splash .in{display:flex;flex-direction:column;align-items:center;gap:14px;position:relative}
+#splash .halo{
+  position:absolute;width:390px;height:390px;border-radius:50%;top:50%;left:50%;margin:-195px 0 0 -195px;
+  background:radial-gradient(circle,rgba(69,214,202,.24),transparent 68%);
+  opacity:0;transform:scale(.6);animation:sp-halo 480ms cubic-bezier(.22,1,.36,1) forwards;
+}
+#splash svg.mark{width:min(150px,40vw);height:auto;position:relative;opacity:0;transform:scale(1.14);animation:sp-land 340ms cubic-bezier(.16,1.02,.3,1) 30ms forwards}
+#splash .wm{position:relative;color:#fff;font-size:30px;font-weight:300;letter-spacing:.02em;opacity:0;animation:sp-fade 400ms ease 260ms forwards}
+#splash .wm b{font-weight:700;color:#5FE0D4}
+#splash .wm-sub{position:relative;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8F93B5;opacity:0;animation:sp-fade 400ms ease 380ms forwards}
+#splash .bub{opacity:.9}
+@keyframes sp-halo{to{opacity:1;transform:scale(1)}}
+@keyframes sp-land{to{opacity:1;transform:scale(1)}}
+@keyframes sp-fade{to{opacity:1}}
+@keyframes sp-out{to{opacity:0;transform:scale(1.04);visibility:hidden}}
+.app,.shell{opacity:0;transform:translateY(10px);animation:app-in 240ms cubic-bezier(.22,1,.36,1) 780ms forwards}
+@keyframes app-in{to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1)}
+.reveal.seen{opacity:1;transform:none}
+
+@media (hover:hover) and (pointer:fine){
+  .icon-btn:hover{border-color:var(--azul);color:var(--azul);transform:translateY(-1px)}
+  .btn:hover{transform:translateY(-1px)}
+  .step:hover,.qc:hover{border-color:var(--o3);color:var(--o3)}
+  .power-btn:hover{transform:scale(1.025)}
+  .stop:hover{background:color-mix(in srgb,var(--stop) 16%,transparent);transform:translateY(-1px)}
+}
+@media (prefers-reduced-motion:reduce){
+  #splash svg.mark,#splash .halo,.app,.shell{transform:none !important}
+  .on .pb-halo,.pb-ring{animation:none !important}
+  .bub i{animation:none !important;opacity:0}
+  .btn:hover,.icon-btn:hover,.power-btn:hover,.stop:hover{transform:none !important}
+  #splash{animation-duration:160ms !important;animation-delay:400ms !important}
+  .app,.shell{animation-duration:160ms !important;animation-delay:410ms !important}
+  .reveal{opacity:1 !important;transform:none !important;transition:none !important}
+  .sheet,.sheet-back{transition-duration:.01s}
+}
+
+
+/* ===== Propuesta 1 · Panel ===== */
+.grid{display:flex;flex-direction:column;gap:10px}
+.rail{display:flex;flex-direction:column;gap:10px;min-width:0}
+@media (min-width:760px){
+  body{padding:26px 22px 48px}
+  .app{max-width:900px;gap:16px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .rail{gap:16px}
+}
+@media (min-width:1100px){
+  .app{max-width:1120px}
+  .grid{grid-template-columns:minmax(0,1.15fr) minmax(360px,1fr)}
+}
+.pad-card{padding:14px 15px 15px;display:flex;flex-direction:column;gap:13px}
+.head{display:flex;align-items:center;gap:8px}
+.head .hint{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+/* Plano de la habitación: crece con el área y se puede leer de un vistazo */
+.plan{position:relative;height:224px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.room{
+  position:relative;border:2px solid var(--o3);border-radius:10px;
+  background-color:var(--o3-bg);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:var(--m) var(--m);background-position:-1px -1px;
+  transition:width .35s cubic-bezier(.22,1,.36,1),height .35s cubic-bezier(.22,1,.36,1),box-shadow .4s;
+}
+.room .door{position:absolute;left:14%;bottom:-3px;width:26px;height:4px;background:var(--surface-2);border-radius:2px}
+.plan .tag{position:absolute;left:12px;bottom:10px;display:flex;align-items:baseline;gap:8px;font-size:11.5px;color:var(--ink-2);font-family:var(--mono)}
+.plan .tag b{font-size:21px;font-weight:350;color:var(--ink);font-family:var(--sans);letter-spacing:-.02em}
+.room .dw,.room .dl{position:absolute;font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
+.room .dw{left:50%;top:-20px;transform:translateX(-50%)}
+.room .dl{right:-9px;top:50%;transform:translate(100%,-50%)}
+.plan.live .room{box-shadow:0 0 0 6px var(--o3-bg),0 0 40px -6px var(--o3-glow)}
+.plan .bub{z-index:1}
+.calc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.calc div{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:14px;padding:9px 6px;text-align:center}
+.calc span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.calc b{display:block;margin-top:3px;font-size:19px;font-weight:400;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.calc div.dur b{color:var(--o3);font-weight:600}
+details.aj{border-top:1px solid var(--line-soft);padding-top:10px}
+details.aj summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink-2);list-style:none;display:flex;align-items:center;gap:8px}
+details.aj summary::-webkit-details-marker{display:none}
+details.aj summary::after{content:"";margin-left:auto;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+details.aj[open] summary::after{transform:rotate(-135deg)}
+details.aj>div{margin-top:12px}
+
+/* Salida */
+.power-card{padding:14px 16px 17px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color .3s}
+.power-card .eyebrow{align-self:flex-start}
+.power-card.on{border-color:color-mix(in srgb,var(--o3) 45%,var(--line))}
+.pw-stage{position:relative;display:grid;place-items:center;width:168px;height:168px;margin-top:4px}
+.pw-stage>*{grid-area:1 / 1}
+.pw-stage .ring-svg{width:168px;height:168px}
+.power-state{margin-top:6px}
+.live{display:flex;flex-direction:column;align-items:center;gap:2px}
+.live em{font-style:normal;font-size:44px;font-weight:250;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.05}
+.live span{font-size:11.5px;color:var(--muted);letter-spacing:.03em}
+
+/* Programación */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.week div{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;border-radius:12px;font-size:10px;color:var(--muted);font-weight:650;letter-spacing:.06em}
+.week b{font-size:14px;font-weight:500;color:var(--ink);letter-spacing:0}
+.week i{width:5px;height:5px;border-radius:50%;background:transparent}
+.week .has i{background:var(--o3)}
+.week .hoy{background:var(--o3-bg)}
+.week .hoy b{color:var(--o3);font-weight:700}
+.next{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.next b{color:var(--ink);font-weight:650}
+</style>
+</head>
+<body>
+<div id="splash" aria-hidden="true"><div class="in"><div class="halo"></div><svg class="mark" viewBox="36.64 0 854.78 718.47" aria-label="TK"><defs><linearGradient id="mks" x1="421.29" y1="375.97" x2="908.96" y2="375.97" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6E9FDD"/><stop offset=".64" stop-color="#9AC0F2"/></linearGradient></defs><polygon fill="#FFFFFF" points="246.71 639.26 246.71 143.38 50.36 143.38 50.36 0 622.95 0 622.95 143.38 427.52 143.38 427.52 639.26 246.71 639.26"/><g transform="translate(-17.54 -56.34)"><polygon fill="url(#mks)" points="908.96 695.6 634.65 339.57 894.35 56.34 696.18 56.34 421.3 351.31 421.3 564.81 515.83 463.52 698.92 695.6 908.96 695.6"/><path fill="#8F93A3" d="M463.23,765.85c-215.43,0-390.07-106.11-390.07-237,0-73.42,55-139,141.21-182.5-97.1,43.11-160.19,112.8-160.19,191.46,0,130.89,174.65,237,390.08,237,94.6,0,181.33-20.46,248.86-54.5-64.47,28.63-143.92,45.54-229.89,45.54"/></g></svg><div class="wm">Ozono<b>cleaner</b></div><div class="wm-sub">TK &middot; Ingenier&iacute;a para la est&eacute;tica</div></div></div>
+<div class="app">
+  <header class="topbar"><svg class="mark" viewBox="36.64 0 854.78 718.47" aria-label="TK"><defs><linearGradient id="mk" x1="421.29" y1="375.97" x2="908.96" y2="375.97" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--lg-k1)"/><stop offset=".64" style="stop-color:var(--lg-k2)"/></linearGradient></defs><polygon fill="var(--lg-blue)" points="246.71 639.26 246.71 143.38 50.36 143.38 50.36 0 622.95 0 622.95 143.38 427.52 143.38 427.52 639.26 246.71 639.26"/><g transform="translate(-17.54 -56.34)"><polygon fill="url(#mk)" points="908.96 695.6 634.65 339.57 894.35 56.34 696.18 56.34 421.3 351.31 421.3 564.81 515.83 463.52 698.92 695.6 908.96 695.6"/><path fill="var(--lg-arc)" d="M463.23,765.85c-215.43,0-390.07-106.11-390.07-237,0-73.42,55-139,141.21-182.5-97.1,43.11-160.19,112.8-160.19,191.46,0,130.89,174.65,237,390.08,237,94.6,0,181.33-20.46,248.86-54.5-64.47,28.63-143.92,45.54-229.89,45.54"/></g></svg>
+    <div class="titles"><h1>Ozono<b>cleaner</b> TEO</h1><span class="brandline">TK &mdash; Ingenier&iacute;a para la est&eacute;tica</span></div>
+    <button class="icon-btn theme-btn" id="themeBtn" data-icon="moon" aria-label="Cambiar a tema oscuro">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.7v2M12 19.3v2M4.4 4.4l1.4 1.4M18.2 18.2l1.4 1.4M2.7 12h2M19.3 12h2M4.4 19.6l1.4-1.4M18.2 5.8l1.4-1.4"/></svg>
+    </button>
+  </header>
+  <div class="connbar"><span class="pill" id="pill" data-state="demo"><i class="dot"></i><span id="pillText">Modo demostraci&oacute;n</span></span><button class="btn btn-primary" id="connectBtn">Conectar</button></div>
+  <div class="alert" id="alert"></div>
+  <div class="local" id="local"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><span id="localTxt"></span></div>
+  <div class="grid">
+    <section class="card pad-card" id="areaCard">
+      <div class="head"><span class="eyebrow">Área a ozonizar</span><span class="chip" id="modeChip" data-mode="idle"><i></i><span id="modeText">En reposo</span></span></div>
+      <div class="plan" id="plan">
+        <div class="room" id="room">
+          <span class="dw" id="dW"></span><span class="dl" id="dL"></span><span class="door"></span>
+          <div id="roomBub"></div>
+        </div>
+        <div class="tag"><b><span id="rArea">18</span> m²</b><span id="rVol">45 m³</span></div>
+      </div>
+      <div id="ap1"></div>
+      <div class="calc">
+        <div><span>Volumen</span><b id="cVol">45 m³</b></div>
+        <div><span>Factor</span><b id="cK">0.60</b></div>
+        <div class="dur"><span>Tiempo</span><b id="cMin">27 min</b></div>
+      </div>
+      <details class="aj"><summary>Ajustes de cálculo</summary><div id="cfg"></div></details>
+    </section>
+
+    <div class="rail">
+      <section class="card power-card" id="power">
+        <span class="eyebrow">Salida</span>
+        <div class="pw-stage">
+          <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="46" pathLength="100"/><circle class="fg" id="ringFg" cx="50" cy="50" r="46" pathLength="100"/></svg>
+          <button class="power-btn" id="powerBtn" data-cmd aria-pressed="false" aria-label="Iniciar ozonización">
+            <span class="pb-halo"></span><span class="pb-rim"></span>
+            <span class="pb-disc"><span id="pwBub"></span></span>
+            <span class="pb-ring"></span>
+            <svg class="pb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v9"/><path d="M6.6 6.6a8 8 0 1 0 10.8 0"/></svg>
+          </button>
+        </div>
+        <div class="power-state"><i></i><span id="powerState">Apagado</span></div>
+        <div class="live"><em id="liveTime">27:00</em><span id="liveNote">duración según el área</span></div>
+      </section>
+
+      <section class="card pad-card" id="progCard">
+        <div class="head"><span class="eyebrow">Programación</span><button class="btn btn-primary" id="addBtn" style="margin-left:auto;padding:7px 13px;font-size:12.5px">+ Programar</button></div>
+        <div class="week" id="week"></div>
+        <div class="next" id="next"></div>
+        <div id="list"></div>
+      </section>
+    </div>
+  </div>
+
+  <button class="stop" id="stopBtn" data-cmd><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v9"/><path d="M6.6 6.6a8 8 0 1 0 10.8 0"/></svg> Paro total</button>
+  <footer class="foot"><p class="sig"><span>RPI Ingeniería</span><i></i><span>Propuesta <b>1</b></span></p></footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ Ozonocleaner · TEO — núcleo común ============
+   Mismo protocolo y misma tarjeta que Teo: un relé que enciende el generador,
+   un ESP32-C3 que cuenta el tiempo y una OLED con sensores táctiles.
+   La app solo elige el área, calcula el tiempo y envía órdenes. */
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const pad2 = (n) => String(n).padStart(2, "0");
+const mmss = (sec) => { const v = Math.max(0, Math.ceil(sec)); return pad2(Math.floor(v / 60)) + ":" + pad2(v % 60); };
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch {} }
+};
+const jget = (k, d) => { try { const v = JSON.parse(store.get(k)); return v == null ? d : v; } catch { return d; } };
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+/* ---- Protocolo (heredado de Teo; UUID y códigos por confirmar con el firmware) ---- */
+const SERVICE_UUID = "2bef07a5-297a-4071-8eaa-1b5ad35bd18e";
+const STATE_UUID   = "f7ed213f-fcfc-418a-92d1-9b4d1ec14197";
+const CMD_UUID     = "92483b33-6ebf-4a0f-beb3-8ab946488f9c";
+const OP = { RELAY: 0x01, SETPOINT: 0x02, TIMER: 0x03, STOP: 0x04 };
+function decodeState(dv){
+  if (dv.byteLength < 10) return null;               // una lectura corta no se interpreta
+  const tm = dv.getUint16(7, true), mask = dv.getUint8(4);
+  return {
+    relay: !!(mask & 1),
+    timerSec: tm === 0xFFFF ? null : tm,
+    errors: dv.getUint8(9),
+    owner: dv.byteLength > 10 ? dv.getUint8(10) : 2   // 0 sin elegir · 1 equipo · 2 app
+  };
+}
+const cmdStop  = () => Uint8Array.of(OP.STOP);
+const cmdTimer = (sec) => { const b = new DataView(new ArrayBuffer(3)); b.setUint8(0, OP.TIMER); b.setUint16(1, sec, true); return new Uint8Array(b.buffer); };
+
+/* ---- Área → tiempo (FÓRMULA PROVISIONAL, editable en Ajustes) ----
+   volumen = área × altura;  minutos = volumen × factor (min/m³), con tope. */
+const AREA_MIN = 4, AREA_MAX = 120;
+const PRESETS = [
+  { n: "Baño", a: 6 }, { n: "Habitación", a: 14 }, { n: "Consultorio", a: 20 },
+  { n: "Sala", a: 30 }, { n: "Local", a: 60 }
+];
+const CFG = Object.assign({ h: 2.5, k: 0.6, max: 120 }, jget("oz.cfg", {}));
+function saveCfg(){ store.set("oz.cfg", JSON.stringify(CFG)); emit(); }
+function calc(area){
+  const vol = area * CFG.h, raw = vol * CFG.k, min = clamp(Math.ceil(raw), 1, CFG.max);
+  return { vol, min, sec: min * 60, capped: raw > CFG.max };
+}
+const fmtMin = (m) => m < 60 ? m + " min" : Math.floor(m / 60) + " h" + (m % 60 ? " " + pad2(m % 60) + " min" : "");
+const fmtDim = (a) => { const s = Math.sqrt(a); return "≈ " + s.toFixed(1) + " × " + s.toFixed(1) + " m"; };
+
+/* ---- Estado ---- */
+const S = { connected: false, owner: 0, relay: false, timerSec: null, total: 0, errors: 0,
+            area: clamp(+store.get("oz.area") || 18, AREA_MIN, AREA_MAX) };
+let huboHardware = false;
+const subs = [];
+const onChange = (fn) => subs.push(fn);
+function emit(){ subs.forEach(f => f()); paintLock(); paintAlert(); }
+const running = () => S.timerSec !== null;
+function setArea(v){
+  S.area = clamp(Math.round(v * 10) / 10, AREA_MIN, AREA_MAX);
+  store.set("oz.area", S.area);
+  emit();
+}
+
+/* ---- Quién manda ----
+   Con el mando en el equipo (sensores táctiles) o sin enlace, la app solo mira:
+   dejar botones que no hacen nada es peor que apagarlos, y simular es mentir. */
+function lockReason(){
+  if (!S.connected) return huboHardware ? "perdida" : null;
+  if (S.owner === 1) return "local";
+  if (S.owner !== 2) return "sin-mando";
+  return null;
+}
+const appSinMando = () => lockReason() !== null;
+const LOCK_TXT = {
+  local: "<b>El equipo tiene el control.</b> Desde aquí solo se mira. Para mandar desde el móvil, elige <b>BLUETOOTH</b> en la pantalla del equipo.",
+  "sin-mando": "<b>Falta elegir quién manda.</b> En la pantalla del equipo, elige <b>BLUETOOTH</b> para poder controlarlo desde aquí.",
+  perdida: "<b>Sin enlace con el equipo.</b> Se muestra el último dato recibido y no se envían órdenes. Pulsa <b>Conectar</b>."
+};
+function paintLock(){
+  const r = lockReason();
+  document.body.classList.toggle("solo-mirar", !!r);
+  document.querySelectorAll("[data-cmd]").forEach(e => { e.disabled = !!r; });
+  const box = $("local"); if (!box) return;
+  box.classList.toggle("show", !!r);
+  if (r) $("localTxt").innerHTML = LOCK_TXT[r];
+}
+function paintAlert(){
+  const box = $("alert"); if (!box) return;
+  box.textContent = S.errors ? "Aviso del equipo · código " + S.errors : "";
+  box.classList.toggle("show", !!S.errors);
+}
+
+let toastTimer;
+function toast(msg){
+  const t = $("toast"); if (!t) return;
+  t.textContent = msg; t.classList.toggle("arriba", !!document.querySelector(".sheet")); t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+/* ---- Sesión ---- */
+function send(bytes){
+  if (appSinMando()) return;
+  if (S.connected && cmdChar) cmdChar.writeValue(bytes).catch(() => toast("No se pudo enviar"));
+}
+function startSession(sec){
+  if (appSinMando()){ toast(lockReason() === "perdida" ? "Sin enlace con el equipo" : "El mando lo tiene el equipo"); return false; }
+  if (running()){ toast("Ya hay una sesión en marcha"); return false; }
+  sec = Math.round(sec);
+  if (!(sec > 0)){ toast("Elige un área mayor que cero"); return false; }
+  S.total = sec; S.timerSec = sec; S.relay = true;
+  send(cmdTimer(sec)); emit(); toast("Sesión iniciada");
+  return true;
+}
+function stopSession(){
+  if (appSinMando()){ toast("El mando lo tiene el equipo"); return; }
+  S.timerSec = null; S.relay = false;
+  send(cmdTimer(0)); emit(); toast("Sesión detenida");
+}
+function paroTotal(){
+  if (appSinMando()){ toast("El mando lo tiene el equipo"); return; }
+  S.timerSec = null; S.relay = false;
+  send(cmdStop()); emit(); toast("Todo apagado");
+}
+function frac(){ return running() && S.total > 0 ? clamp(1 - S.timerSec / S.total, 0, 1) : 0; }
+
+/* ---- Programación ----
+   Aquí solo se guarda y se muestra. El disparo real con la app cerrada necesita
+   reloj en la tarjeta (RTC/NTP) y una orden nueva en el protocolo: en esta
+   maqueta el disparo funciona únicamente con la página abierta. */
+const DIAS = ["D", "L", "M", "X", "J", "V", "S"];          // índice = Date.getDay()
+const ORDEN = [1, 2, 3, 4, 5, 6, 0];                        // semana empezando en lunes
+const DIAS_LARGO = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const ymd = (d) => d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+const addDays = (d, n) => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); return x; };
+const uid = () => Math.random().toString(36).slice(2, 9);
+function seedSched(){
+  const t = new Date(), sab = addDays(t, (6 - t.getDay() + 7) % 7 || 7);
+  return [
+    { id: uid(), label: "Consultorio", time: "20:30", days: [1,2,3,4,5], date: null, area: 20, on: true, last: null },
+    { id: uid(), label: "Sala de espera", time: "09:00", days: null, date: ymd(sab), area: 30, on: true, last: null }
+  ];
+}
+let sched = jget("oz.sched", null) || seedSched();
+const saveSched = () => { store.set("oz.sched", JSON.stringify(sched)); emit(); };
+const occursOn = (s, d) => s.days ? s.days.includes(d.getDay()) : s.date === ymd(d);
+const byTime = (a, b) => a.time.localeCompare(b.time);
+const atOf = (s, d) => { const [h, m] = s.time.split(":").map(Number); return new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, m); };
+function schedOn(d){ return sched.filter(s => occursOn(s, d)).sort(byTime); }
+function upcoming(n = 5, from = new Date()){
+  const out = [];
+  for (let i = 0; i < 62 && out.length < n; i++){
+    const d = addDays(from, i);
+    for (const s of schedOn(d)) if (s.on){ const at = atOf(s, d); if (at > from) out.push({ s, at }); }
+  }
+  return out.slice(0, n);
+}
+const HORA = (d) => pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+function whenTxt(at){
+  const hoy = new Date(), dif = Math.round((new Date(at.getFullYear(), at.getMonth(), at.getDate()) - new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate())) / 864e5);
+  if (dif === 0) return "Hoy " + HORA(at);
+  if (dif === 1) return "Mañana " + HORA(at);
+  return DIAS_LARGO[at.getDay()].slice(0, 3) + " " + at.getDate() + "/" + pad2(at.getMonth() + 1) + " " + HORA(at);
+}
+function relTxt(at){
+  const min = Math.max(0, Math.round((at - new Date()) / 6e4));
+  if (min < 1) return "ahora"; if (min < 60) return "en " + min + " min";
+  const h = Math.floor(min / 60); if (h < 24) return "en " + h + " h " + pad2(min % 60) + " min";
+  return "en " + Math.floor(h / 24) + " d";
+}
+const diasTxt = (s) => s.days
+  ? (s.days.length === 7 ? "Todos los días" : ORDEN.filter(d => s.days.includes(d)).map(d => DIAS[d]).join(" · "))
+  : (() => { const [y, m, d] = s.date.split("-").map(Number); const x = new Date(y, m - 1, d); return DIAS_LARGO[x.getDay()] + " " + d + "/" + pad2(m); })();
+function tickSched(){
+  const now = new Date(), key = ymd(now) + " " + HORA(now);
+  let cambio = false;
+  sched.forEach(s => {
+    if (!s.on || s.time !== HORA(now) || s.last === key || !occursOn(s, now)) return;
+    s.last = key; cambio = true;
+    if (running()){ toast("Programación omitida: hay una sesión en marcha"); return; }
+    if (startSession(calc(s.area).sec)) toast("Programado: " + (s.label || "Sesión") + " · " + fmtMin(calc(s.area).min));
+  });
+  if (cambio) saveSched();
+}
+
+/* ---- Burbujas ---- */
+function bubbles(el, n = 14, h = 120){
+  el.classList.add("bub");
+  let html = "";
+  for (let i = 0; i < n; i++){
+    const s = 5 + Math.random() * 11;
+    html += `<i style="--s:${s.toFixed(1)}px;--x:${(Math.random() * 94).toFixed(1)}%;--d:${(4 + Math.random() * 4).toFixed(1)}s;--dl:${(-Math.random() * 6).toFixed(1)}s;--h:${h}px;--dx:${(Math.random() * 18 - 9).toFixed(1)}px"></i>`;
+  }
+  el.innerHTML = html;
+}
+function ring(circle, f){ circle.style.opacity = f > 0 ? 1 : 0; circle.style.strokeDashoffset = (100 * (1 - clamp(f, 0, 1))).toFixed(2); }
+
+/* ---- Hoja inferior ---- */
+function openSheet(title, build){
+  const back = document.createElement("div"); back.className = "sheet-back";
+  const sh = document.createElement("div"); sh.className = "sheet";
+  sh.setAttribute("role", "dialog"); sh.setAttribute("aria-modal", "true"); sh.setAttribute("aria-label", title);
+  sh.innerHTML = '<div class="sheet-grip"></div><div class="sheet-head"><b>' + esc(title) + '</b><button class="icon-btn" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="sheet-body"></div>';
+  document.body.append(back, sh);
+  let cerrada = false;
+  const close = () => {
+    if (cerrada) return; cerrada = true;
+    document.removeEventListener("keydown", onKey);
+    back.classList.remove("show"); sh.classList.remove("show");
+    setTimeout(() => { back.remove(); sh.remove(); }, 300);
+  };
+  const onKey = (e) => { if (e.key === "Escape") close(); };
+  document.addEventListener("keydown", onKey);
+  back.onclick = close; sh.querySelector(".icon-btn").onclick = close;
+  build(sh.querySelector(".sheet-body"), close);
+  requestAnimationFrame(() => { back.classList.add("show"); sh.classList.add("show"); });
+  return close;
+}
+
+/* ---- Selector de área (chips + paso + deslizador) ---- */
+function areaPicker(el, { get, set, dim = true }){
+  el.classList.add("ap");
+  el.innerHTML =
+    '<div class="chips">' + PRESETS.map(p => `<button class="qc" data-a="${p.a}">${p.n}<small>${p.a} m²</small></button>`).join("") + '</div>' +
+    '<div class="ap-row"><button class="step" data-d="-1" aria-label="Menos área">&minus;</button>' +
+    '<div class="ap-val"><span></span><small>m²</small></div><button class="step" data-d="1" aria-label="Más área">+</button></div>' +
+    '<input class="ap-range" type="range" min="' + AREA_MIN + '" max="' + AREA_MAX + '" step="1" aria-label="Área a ozonizar en metros cuadrados">' +
+    (dim ? '<div class="ap-sub"></div>' : "");
+  const rng = el.querySelector("input"), val = el.querySelector(".ap-val span"), sub = el.querySelector(".ap-sub");
+  const paint = () => {
+    const a = get(); val.textContent = Number.isInteger(a) ? a : a.toFixed(1); rng.value = a;
+    rng.style.setProperty("--p", ((a - AREA_MIN) / (AREA_MAX - AREA_MIN) * 100).toFixed(1) + "%");
+    el.querySelectorAll(".qc").forEach(c => c.setAttribute("aria-pressed", (+c.dataset.a === a) + ""));
+    if (sub) sub.textContent = fmtDim(a) + " · " + (a * CFG.h).toFixed(0) + " m³";
+  };
+  el.querySelectorAll(".qc").forEach(c => c.onclick = () => { set(+c.dataset.a); paint(); });
+  el.querySelectorAll(".step").forEach(b => b.onclick = () => { set(clamp(Math.round(get()) + +b.dataset.d, AREA_MIN, AREA_MAX)); paint(); });
+  rng.oninput = () => { set(+rng.value); paint(); };
+  paint();
+  return { paint };
+}
+
+/* ---- Rueda (heredada de Teo) ---- */
+const ROW = () => parseInt(css("--row"), 10) || 40;
+function wheel(el, max, init, onMove){
+  el.innerHTML = '<div class="pad"></div>' + Array.from({ length: max + 1 }, (_, i) => `<b>${pad2(i)}</b>`).join("") + '<div class="pad"></div>';
+  const val = () => clamp(Math.round(el.scrollTop / ROW()), 0, max);
+  const mark = () => { const v = val(); el.querySelectorAll("b").forEach((b, i) => b.toggleAttribute("data-sel", i === v)); el.setAttribute("aria-valuenow", v); return v; };
+  el.setAttribute("role", "slider"); el.tabIndex = 0; el.setAttribute("aria-valuemin", 0); el.setAttribute("aria-valuemax", max);
+  let raf = 0;
+  el.addEventListener("scroll", () => { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; mark(); onMove && onMove(); }); }, { passive: true });
+  el.addEventListener("keydown", e => {
+    if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+    e.preventDefault(); el.scrollTo({ top: clamp(val() + (e.key === "ArrowUp" ? -1 : 1), 0, max) * ROW(), behavior: "smooth" });
+  });
+  const set = (v) => { el.scrollTo({ top: v * ROW(), behavior: "auto" }); mark(); };
+  set(init);
+  return { val, set };
+}
+
+/* ---- Editor de programación (hoja) ---- */
+function openEditor(item, prefill = {}){
+  const nuevo = !item;
+  const manana = ymd(addDays(new Date(), 1));
+  const d = nuevo
+    ? Object.assign({ id: uid(), label: "", time: "20:00", days: null, date: manana, area: S.area, on: true, last: null }, prefill)
+    : JSON.parse(JSON.stringify(item));
+  openSheet(nuevo ? "Nueva programación" : "Editar programación", (body, close) => {
+    body.innerHTML =
+      '<div class="field"><span class="eyebrow">Nombre</span><input class="txt" id="edName" maxlength="28" placeholder="Ej. Consultorio" autocomplete="off"></div>' +
+      '<div class="field"><span class="eyebrow">Cuándo</span><div class="seg" id="edKind"><button data-k="once">Una vez</button><button data-k="week">Cada semana</button></div>' +
+      '<input class="txt" id="edDate" type="date"><div class="days" id="edDays"></div></div>' +
+      '<div class="field"><span class="eyebrow">Hora de encendido</span><div class="tpick"><div class="tband"></div><div class="tcol" id="edH" aria-label="Hora"></div><div class="tsep">:</div><div class="tcol" id="edM" aria-label="Minutos"></div></div></div>' +
+      '<div class="field"><span class="eyebrow">Área a ozonizar</span><div id="edArea"></div></div>' +
+      '<div class="resumen" id="edSum"></div>' +
+      '<div class="sheet-actions">' + (nuevo ? "" : '<button class="btn btn-danger" id="edDel">Eliminar</button>') + '<button class="btn btn-primary" id="edOk">Guardar</button></div>';
+    const q = (id) => body.querySelector("#" + id);
+    q("edName").value = d.label; q("edDate").value = d.date || manana;
+    q("edDays").innerHTML = ORDEN.map(n => `<button data-d="${n}" aria-pressed="${!!(d.days && d.days.includes(n))}" aria-label="${DIAS_LARGO[n]}">${DIAS[n]}</button>`).join("");
+    let kind = d.days ? "week" : "once";
+    const [hh, mm] = d.time.split(":").map(Number);
+    const wH = wheel(q("edH"), 23, hh, sum), wM = wheel(q("edM"), 59, mm, sum);
+    const ap = areaPicker(q("edArea"), { get: () => d.area, set: (v) => { d.area = v; sum(); } });
+    function paintKind(){
+      q("edKind").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", (b.dataset.k === kind) + ""));
+      q("edDate").hidden = kind !== "once"; q("edDays").hidden = kind !== "week";
+    }
+    function sum(){
+      const c = calc(d.area), ini = wH.val() * 60 + wM.val(), fin = (ini + c.min) % 1440;
+      q("edSum").innerHTML = "Dura <b>" + fmtMin(c.min) + "</b> · de " + pad2(Math.floor(ini / 60)) + ":" + pad2(ini % 60) + " a " + pad2(Math.floor(fin / 60)) + ":" + pad2(fin % 60);
+    }
+    q("edKind").onclick = (e) => { const b = e.target.closest("button"); if (b){ kind = b.dataset.k; paintKind(); } };
+    q("edDays").onclick = (e) => { const b = e.target.closest("button"); if (b) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); };
+    paintKind(); sum();
+    q("edOk").onclick = () => {
+      d.label = q("edName").value.trim();
+      d.time = pad2(wH.val()) + ":" + pad2(wM.val());
+      if (kind === "week"){
+        d.days = ORDEN.filter(n => q("edDays").querySelector(`[data-d="${n}"]`).getAttribute("aria-pressed") === "true"); d.date = null;
+        if (!d.days.length){ toast("Elige al menos un día"); return; }
+      } else {
+        d.date = q("edDate").value; d.days = null;
+        if (!d.date){ toast("Elige una fecha"); return; }
+        const [y, m, dd] = d.date.split("-").map(Number);
+        if (atOf(d, new Date(y, m - 1, dd)) <= new Date()){ toast("Esa fecha y hora ya pasaron"); return; }
+      }
+      d.last = null;
+      const i = sched.findIndex(s => s.id === d.id);
+      if (i >= 0) sched[i] = d; else sched.push(d);
+      saveSched(); close(); toast(nuevo ? "Programación guardada" : "Cambios guardados");
+    };
+    if (!nuevo) q("edDel").onclick = () => { sched = sched.filter(s => s.id !== d.id); saveSched(); close(); toast("Programación eliminada"); };
+  });
+}
+function toggleSched(id){ const s = sched.find(x => x.id === id); if (s){ s.on = !s.on; saveSched(); } }
+
+/* ---- Tema (igual que Teo) ---- */
+const themeBtn = $("themeBtn");
+const prefiereOscuro = matchMedia("(prefers-color-scheme: dark)");
+const temaOscuro = () => { const t = document.documentElement.getAttribute("data-theme"); return t ? t === "dark" : prefiereOscuro.matches; };
+function paintThemeBtn(){
+  if (!themeBtn) return;
+  const o = temaOscuro();
+  themeBtn.dataset.icon = o ? "sun" : "moon";
+  themeBtn.setAttribute("aria-label", o ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+  const mt = document.querySelector('meta[name="theme-color"]'); if (mt) mt.content = o ? "#0E0E22" : "#2E2A5C";
+}
+if (themeBtn) themeBtn.onclick = () => {
+  const next = temaOscuro() ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next); store.set("tk.theme", next); paintThemeBtn(); emit();
+};
+const paramTema = new URLSearchParams(location.search).get("tema");
+const savedTheme = (paramTema === "light" || paramTema === "dark") ? paramTema : store.get("tk.theme");
+if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+prefiereOscuro.addEventListener("change", () => { if (!store.get("tk.theme")) paintThemeBtn(); });
+paintThemeBtn();
+
+/* ---- Conexión BLE (mismo flujo que Teo) ---- */
+let device = null, cmdChar = null, connecting = false;
+function setPill(state, text){ $("pill").dataset.state = state; $("pillText").textContent = text; }
+function applyState(st){
+  if (!st) return;
+  const was = running();
+  Object.assign(S, st);
+  if (S.timerSec !== null && (!was || S.timerSec > S.total)) S.total = S.timerSec;
+  emit();
+}
+function onDisconnect(){
+  S.connected = false; cmdChar = null;
+  $("connectBtn").textContent = "Conectar";
+  if (huboHardware){ setPill("perdida", "Sin conexión · último dato"); toast("Se perdió la conexión — el equipo sigue solo"); }
+  else { setPill("demo", "Modo demostración"); toast("Equipo desconectado"); }
+  emit();
+}
+$("connectBtn").onclick = async () => {
+  if (connecting) return;
+  if (S.connected){ device.gatt.disconnect(); return; }
+  if (!navigator.bluetooth){ toast("Usa Chrome, Edge o Bluefy en iPhone"); return; }
+  connecting = true; $("connectBtn").disabled = true;
+  setPill("wait", "Buscando equipo…");
+  try {
+    device = await navigator.bluetooth.requestDevice({ filters: [{ services: [SERVICE_UUID] }] });
+    device.addEventListener("gattserverdisconnected", onDisconnect);
+    const svc = await (await device.gatt.connect()).getPrimaryService(SERVICE_UUID);
+    cmdChar = await svc.getCharacteristic(CMD_UUID);
+    const stateChar = await svc.getCharacteristic(STATE_UUID);
+    await stateChar.startNotifications();
+    stateChar.addEventListener("characteristicvaluechanged", e => applyState(decodeState(e.target.value)));
+    S.connected = true; huboHardware = true;
+    $("connectBtn").textContent = "Desconectar";
+    setPill("on", device.name || "Ozonocleaner TEO");
+    try { applyState(decodeState(await stateChar.readValue())); } catch (e) {}
+    toast("Conectado"); emit();
+  } catch (err) {
+    try { if (device && device.gatt.connected) device.gatt.disconnect(); } catch {}
+    setPill(huboHardware ? "perdida" : "demo", huboHardware ? "Sin conexión · último dato" : "Modo demostración");
+    if (err.name !== "NotFoundError") toast("No se pudo conectar");
+  } finally { connecting = false; $("connectBtn").disabled = false; }
+};
+
+/* ---- Reloj de la maqueta: cuenta atrás y programación (solo sin hardware) ---- */
+setInterval(() => {
+  if (!S.connected && !huboHardware && running()){
+    S.timerSec = Math.max(0, S.timerSec - 1);
+    if (S.timerSec === 0){ S.timerSec = null; S.relay = false; toast("Sesión terminada · ventile el ambiente antes de entrar"); }
+    emit();
+  } else if (running()) emit();
+  tickSched();
+}, 1000);
+
+/* ---- Entrada por secciones ---- */
+function revealAll(sel){
+  if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const io = new IntersectionObserver((items) => items.forEach(it => {
+    if (!it.isIntersecting) return; it.target.classList.add("seen"); io.unobserve(it.target);
+  }), { threshold: .12, rootMargin: "0px 0px -6% 0px" });
+  document.querySelectorAll(sel).forEach(el => {
+    if (el.getBoundingClientRect().top < innerHeight * 0.92){ el.classList.add("reveal", "seen"); return; }
+    el.classList.add("reveal"); io.observe(el);
+  });
+}
+
+/* ---- Filas de programación y panel de cálculo (comunes) ---- */
+function schedRowHTML(s){
+  const c = calc(s.area);
+  return `<div class="srow${s.on ? "" : " off"}" data-id="${s.id}" tabindex="0" role="button" aria-label="Editar ${esc(s.label || "programación")}">` +
+    `<div class="t">${s.time}</div><div class="m"><b>${esc(s.label || "Sin nombre")}</b><span>${diasTxt(s)} · ${s.area} m² · ${fmtMin(c.min)}</span></div>` +
+    `<button class="switch" role="switch" aria-checked="${s.on}" aria-label="Activar o pausar"></button></div>`;
+}
+function bindRows(root){
+  const abrir = (e) => {
+    const row = e.target.closest(".srow"); if (!row) return;
+    if (e.target.closest(".switch")){ toggleSched(row.dataset.id); return; }
+    openEditor(sched.find(s => s.id === row.dataset.id));
+  };
+  root.addEventListener("click", abrir);
+  root.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("srow")){ e.preventDefault(); abrir(e); } });
+}
+function cfgPanel(el){
+  const F = [
+    { k: "h",   t: "Altura del techo", min: 2, max: 5, step: .1, u: " m",      f: v => v.toFixed(1) },
+    { k: "k",   t: "Factor de ozonización", min: .2, max: 2, step: .05, u: " min/m³", f: v => v.toFixed(2) },
+    { k: "max", t: "Tope de sesión", min: 30, max: 240, step: 10, u: " min",  f: v => v.toFixed(0) }
+  ];
+  el.innerHTML = F.map(f => `<div class="cfg"><div class="cfg-h"><span>${f.t}</span><b class="mono" data-v="${f.k}"></b></div>` +
+    `<input class="ap-range" type="range" data-k="${f.k}" min="${f.min}" max="${f.max}" step="${f.step}"></div>`).join("") +
+    '<p class="cfg-nota">Valores provisionales: se ajustan con mediciones reales del generador.</p>';
+  const paint = () => F.forEach(f => {
+    const r = el.querySelector(`[data-k="${f.k}"]`); r.value = CFG[f.k];
+    r.style.setProperty("--p", ((CFG[f.k] - f.min) / (f.max - f.min) * 100).toFixed(1) + "%");
+    el.querySelector(`[data-v="${f.k}"]`).textContent = f.f(CFG[f.k]) + f.u;
+  });
+  el.querySelectorAll("input").forEach(r => r.oninput = () => { CFG[r.dataset.k] = +r.value; saveCfg(); paint(); });
+  paint();
+}
+
+
+/* ===== Propuesta 1 ===== */
+let M = 19;                                     // píxeles por metro: se adapta para que el plano llene la caja
+bubbles($("roomBub"), 16, 150);
+bubbles($("pwBub"), 8, 100);
+const ap = areaPicker($("ap1"), { get: () => S.area, set: setArea, dim: false });
+cfgPanel($("cfg"));
+bindRows($("list"));
+
+function paintPlan(){
+  const a = S.area, w = Math.sqrt(a * 4 / 3), l = Math.sqrt(a * 3 / 4);
+  const pl = $("plan"); M = clamp(Math.min((pl.clientWidth - 76) / w, (pl.clientHeight - 74) / l), 9, 32);
+  pl.style.setProperty("--m", M.toFixed(1) + "px");
+  const r = $("room"); r.style.width = (w * M).toFixed(0) + "px"; r.style.height = (l * M).toFixed(0) + "px";
+  $("dW").textContent = w.toFixed(1) + " m"; $("dL").textContent = l.toFixed(1) + " m";
+  $("rArea").textContent = Number.isInteger(a) ? a : a.toFixed(1); $("rVol").textContent = (a * CFG.h).toFixed(0) + " m³";
+}
+let sigList = "";
+function paintProg(){
+  const hoy = new Date(), lun = addDays(hoy, -((hoy.getDay() + 6) % 7));
+  $("week").innerHTML = ORDEN.map((n, i) => {
+    const d = addDays(lun, i), has = schedOn(d).some(s => s.on && (s.days ? d >= new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) : true));
+    return `<div class="${ymd(d) === ymd(hoy) ? "hoy " : ""}${has ? "has" : ""}">${DIAS[n]}<b>${d.getDate()}</b><i></i></div>`;
+  }).join("");
+  const nx = upcoming(1)[0];
+  $("next").innerHTML = nx
+    ? `Próxima: <b>${whenTxt(nx.at)}</b> · ${esc(nx.s.label || "Sesión")} · ${fmtMin(calc(nx.s.area).min)} <span style="color:var(--muted)">(${relTxt(nx.at)})</span>`
+    : "Sin sesiones programadas.";
+  const sig = JSON.stringify(sched);
+  if (sig !== sigList){
+    sigList = sig;
+    $("list").innerHTML = sched.length ? sched.slice().sort(byTime).map(schedRowHTML).join("") : '<div class="vacio">Aún no hay programaciones.<br>Toca <b>+ Programar</b> para crear la primera.</div>';
+  }
+}
+function paint(){
+  const c = calc(S.area), run = running();
+  paintPlan(); ap.paint();
+  $("cVol").textContent = c.vol.toFixed(0) + " m³"; $("cK").textContent = CFG.k.toFixed(2);
+  $("cMin").textContent = fmtMin(c.min) + (c.capped ? " (tope)" : "");
+  $("plan").classList.toggle("live", run);
+  $("modeChip").dataset.mode = run ? "run" : "idle"; $("modeText").textContent = run ? "Ozonizando" : "En reposo";
+  const p = $("power"); p.classList.toggle("on", run);
+  $("powerBtn").setAttribute("aria-pressed", run + "");
+  $("powerBtn").setAttribute("aria-label", run ? "Detener la ozonización" : "Iniciar la ozonización");
+  $("powerState").textContent = run ? "Ozonizando" : "Apagado";
+  document.querySelector("#areaCard .bub").classList.toggle("live", run);
+  $("liveTime").textContent = mmss(run ? S.timerSec : c.sec);
+  $("liveNote").textContent = run ? "restante · termina " + HORA(new Date(Date.now() + S.timerSec * 1000)) : "duración según el área";
+  ring($("ringFg"), frac());
+  paintProg();
+}
+onChange(paint);
+$("powerBtn").addEventListener("click", () => {
+  const b = $("powerBtn"); b.classList.remove("pressed"); void b.offsetWidth; b.classList.add("pressed");
+  running() ? stopSession() : startSession(calc(S.area).sec);
+});
+$("powerBtn").addEventListener("animationend", e => { if (e.animationName === "pb-ring") $("powerBtn").classList.remove("pressed"); });
+$("stopBtn").onclick = paroTotal;
+$("addBtn").onclick = () => openEditor(null);
+paint(); paintLock(); paintAlert();
+revealAll(".card, .stop");
+</script>
+</body>
+</html>

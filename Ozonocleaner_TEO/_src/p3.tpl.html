@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ozonocleaner TEO · Propuesta 3 · Agenda</title>
+<meta name="description" content="Propuesta 3: el calendario es la pantalla principal. La próxima sesión arriba y un botón para ozonizar ahora.">
+<meta name="theme-color" content="#2E2A5C">
+<link rel="icon" href="{{FAVICON}}">
+<style>
+/*@BASE_CSS@*/
+
+/* ===== Propuesta 3 · Agenda ===== */
+.cols{display:flex;flex-direction:column;gap:10px}
+@media (min-width:860px){
+  body{padding:26px 22px 60px}
+  .app{max-width:980px;gap:16px}
+  .cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,1fr);gap:16px;align-items:start}
+}
+.pad-card{padding:14px 15px 15px;display:flex;flex-direction:column;gap:12px}
+.head{display:flex;align-items:center;gap:8px}
+
+/* Tarjeta principal: próxima sesión o sesión en curso */
+.hero{
+  position:relative;overflow:hidden;padding:18px 18px 16px;display:flex;flex-direction:column;gap:14px;
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb,var(--o3-glow) 26%,transparent), transparent 60%),
+    linear-gradient(160deg,#2E2A5C,#1B1840);
+  border-color:transparent;color:#fff;
+}
+.hero .eyebrow{color:#9DA3C8}
+.hero .bub{opacity:0;transition:opacity .5s}
+.hero.on .bub{opacity:.9}
+.hero .row{position:relative;z-index:2;display:flex;align-items:center;gap:16px}
+.hero .big{font-size:32px;white-space:nowrap;font-weight:250;letter-spacing:-.03em;line-height:1.05;font-variant-numeric:tabular-nums}
+.hero .sub{font-size:13px;color:#C4C9E6;margin-top:5px;line-height:1.45}
+.hero .sub b{color:#fff;font-weight:650}
+.hero .rel{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:rgba(95,224,212,.16);color:#7FEDE1}
+.hero .eyebrow,.hero .txt-col{position:relative;z-index:2}
+.hero .ringbox{position:relative;width:92px;height:92px;flex:none;display:none}
+.hero.on .ringbox{display:block}
+.hero .ringbox .ring-svg{width:92px;height:92px}
+.hero .ringbox .ring-svg .bg{stroke:rgba(255,255,255,.14)}
+.hero .ringbox .ring-svg .fg{stroke:#5FE0D4}
+.hero .ringbox b{position:absolute;inset:0;display:grid;place-items:center;font-size:19px;font-weight:400;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.hero .acts{position:relative;z-index:2;display:flex;gap:10px}
+.hero .acts .btn{flex:1;padding:12px;font-size:14px}
+.hero .btn-light{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#fff}
+.hero .btn-stop{background:rgba(224,112,95,.16);border-color:rgba(224,112,95,.5);color:#FFB4A8}
+.hero .btn-primary{background:linear-gradient(140deg,#4FD8CC,#2C9DB6);color:#06302F;box-shadow:0 12px 26px -12px rgba(79,216,204,.9)}
+
+/* Calendario */
+.cal-h{display:flex;align-items:center;gap:8px}
+.cal-h b{flex:1;text-align:center;font-size:15px;font-weight:650;text-transform:capitalize}
+.cal-h .icon-btn{width:34px;height:34px}
+.dow,.mes{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow span{text-align:center;font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:650;padding:2px 0}
+.mes button{
+  position:relative;aspect-ratio:1 / 1.02;border-radius:13px;border:1px solid transparent;background:transparent;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font-size:14px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;transition:background .16s,border-color .16s,transform .12s;
+}
+.mes button:active{transform:scale(.94)}
+.mes button.otro{color:var(--muted);opacity:.5}
+.mes button.pasado{color:var(--muted)}
+.mes button.hoy{border-color:var(--o3);color:var(--o3);font-weight:700}
+.mes button.sel{background:linear-gradient(150deg,var(--o3),var(--o3-deep));color:#fff;border-color:transparent;box-shadow:0 10px 20px -12px var(--o3)}
+.mes .pts{display:flex;gap:3px;height:5px}
+.mes .pts i{width:5px;height:5px;border-radius:50%;background:var(--o3)}
+.mes button.sel .pts i{background:#fff}
+@media (hover:hover) and (pointer:fine){ .mes button:hover:not(.sel){background:var(--o3-bg)} }
+.dia-h{display:flex;align-items:center;gap:8px}
+.dia-h b{font-size:14px;font-weight:650}
+.dia-h .btn{margin-left:auto;padding:7px 13px;font-size:12.5px}
+
+/* Botón flotante */
+.fab{
+  position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:45;
+  display:flex;align-items:center;gap:9px;height:52px;padding:0 20px 0 16px;border:0;border-radius:999px;
+  font-size:14.5px;font-weight:700;color:var(--on-o3);
+  background:linear-gradient(140deg,var(--o3),color-mix(in srgb,var(--o3) 45%,var(--azul)));
+  box-shadow:0 18px 34px -14px color-mix(in srgb,var(--o3) 95%,transparent);transition:transform .16s;
+}
+.fab:active{transform:scale(.96)}
+.fab svg{width:20px;height:20px}
+body{padding-bottom:90px}
+.qs-time{text-align:center}
+.qs-time em{font-style:normal;font-size:44px;font-weight:250;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--o3)}
+.qs-time span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+</style>
+</head>
+<body>
+{{SPLASH}}
+<div class="app">
+  {{CHROME}}
+
+  <section class="card hero" id="hero">
+    <div id="heroBub"></div>
+    <span class="eyebrow" id="heroEy">Próxima sesión</span>
+    <div class="row">
+      <div class="txt-col" style="flex:1;min-width:0">
+        <div class="big" id="heroBig">—</div>
+        <div class="sub" id="heroSub"></div>
+        <span class="rel" id="heroRel" hidden></span>
+      </div>
+      <div class="ringbox"><svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="46" pathLength="100"/><circle class="fg" id="ringFg" cx="50" cy="50" r="46" pathLength="100"/></svg><b id="heroClock">00:00</b></div>
+    </div>
+    <div class="acts" id="heroActs"></div>
+  </section>
+
+  <div class="cols">
+    <section class="card pad-card" id="calCard">
+      <div class="cal-h">
+        <button class="icon-btn" id="prev" aria-label="Mes anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <b id="mesTit"></b>
+        <button class="icon-btn" id="next" aria-label="Mes siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="dow" id="dow"></div>
+      <div class="mes" id="mes" role="grid" aria-label="Calendario"></div>
+    </section>
+
+    <section class="card pad-card" id="dayCard">
+      <div class="dia-h"><b id="diaTit"></b><button class="btn btn-primary" id="addDay">+ Programar</button></div>
+      <div id="dayList"></div>
+    </section>
+  </div>
+
+  <button class="stop" id="stopBtn" data-cmd>{{STOPICON}} Paro total</button>
+  <footer class="foot"><p class="sig"><span>RPI Ingeniería</span><i></i><span>Propuesta <b>3</b></span></p></footer>
+</div>
+
+<button class="fab" id="fab" data-cmd aria-label="Ozonizar ahora">{{PWR}}<span>Ozonizar ahora</span></button>
+<div class="toast" id="toast" style="bottom:86px"></div>
+
+<script>
+/*@CORE_JS@*/
+
+/* ===== Propuesta 3 ===== */
+bubbles($("heroBub"), 18, 240);
+bindRows($("dayList"));
+const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+let vista = new Date(); vista.setDate(1);
+let sel = new Date();
+$("dow").innerHTML = ORDEN.map(n => `<span>${DIAS[n]}</span>`).join("");
+const hoy0 = () => { const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); };
+const cuentaDia = (d) => schedOn(d).filter(s => s.on && (s.days ? d >= hoy0() : true));
+
+function paintCal(){
+  $("mesTit").textContent = MESES[vista.getMonth()] + " " + vista.getFullYear();
+  const ini = addDays(vista, -((vista.getDay() + 6) % 7));
+  let h = "";
+  for (let i = 0; i < 42; i++){
+    const d = addDays(ini, i), n = cuentaDia(d).length, otro = d.getMonth() !== vista.getMonth();
+    const cls = [otro ? "otro" : "", d < hoy0() ? "pasado" : "", ymd(d) === ymd(new Date()) ? "hoy" : "", ymd(d) === ymd(sel) ? "sel" : ""].join(" ").trim();
+    h += `<button role="gridcell" data-d="${ymd(d)}" class="${cls}" aria-label="${d.getDate()} de ${MESES[d.getMonth()]}${n ? ", " + n + " sesión(es)" : ""}"${ymd(d) === ymd(sel) ? ' aria-selected="true"' : ""}>${d.getDate()}<span class="pts">${"<i></i>".repeat(Math.min(n, 3))}</span></button>`;
+  }
+  if (h !== paintCal.h){ paintCal.h = h; $("mes").innerHTML = h; }
+}
+$("mes").onclick = (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  const [y, m, d] = b.dataset.d.split("-").map(Number); sel = new Date(y, m - 1, d);
+  if (sel.getMonth() !== vista.getMonth()){ vista = new Date(y, m - 1, 1); }
+  paint(true);
+};
+$("prev").onclick = () => { vista = new Date(vista.getFullYear(), vista.getMonth() - 1, 1); paintCal(); };
+$("next").onclick = () => { vista = new Date(vista.getFullYear(), vista.getMonth() + 1, 1); paintCal(); };
+$("addDay").onclick = () => openEditor(null, { date: ymd(sel) });
+
+let sigDay = "";
+function paintDay(){
+  const t = ymd(sel) === ymd(new Date()) ? "Hoy" : ymd(sel) === ymd(addDays(new Date(), 1)) ? "Mañana" : DIAS_LARGO[sel.getDay()];
+  $("diaTit").textContent = t[0].toUpperCase() + t.slice(1) + " · " + sel.getDate() + " de " + MESES[sel.getMonth()];
+  $("addDay").disabled = sel < hoy0();
+  const l = schedOn(sel);
+  const sig = ymd(sel) + JSON.stringify(sched);
+  if (sig !== sigDay){ sigDay = sig; $("dayList").innerHTML = l.length ? l.map(schedRowHTML).join("") : '<div class="vacio">Nada programado este día.' + (sel < hoy0() ? "" : "<br>Toca <b>+ Programar</b> para agregar una sesión.") + "</div>"; }
+}
+function paintHero(){
+  const run = running(), c = calc(S.area), nx = upcoming(1)[0];
+  const hero = $("hero"); hero.classList.toggle("on", run);
+  hero.querySelector(".bub").classList.toggle("live", run);
+  $("heroEy").textContent = run ? "Ozonizando ahora" : "Próxima sesión";
+  $("heroRel").hidden = run || !nx;
+  let acts = "";
+  if (run){
+    $("heroBig").textContent = "Fin " + HORA(new Date(Date.now() + S.timerSec * 1000));
+    $("heroSub").innerHTML = "Área <b>" + (Number.isInteger(S.area) ? S.area : S.area.toFixed(1)) + " m²</b> · " + fmtMin(Math.round(S.total / 60)) + " en total";
+    $("heroClock").textContent = mmss(S.timerSec); ring($("ringFg"), frac());
+    acts = '<button class="btn btn-stop" id="hStop" data-cmd>Detener sesión</button>';
+  } else {
+    if (nx){
+      $("heroBig").textContent = whenTxt(nx.at);
+      $("heroSub").innerHTML = "<b>" + esc(nx.s.label || "Sesión") + "</b> · " + nx.s.area + " m² · " + fmtMin(calc(nx.s.area).min);
+      $("heroRel").textContent = relTxt(nx.at);
+    } else { $("heroBig").textContent = "Sin sesiones"; $("heroSub").textContent = "Programa una desde el calendario o pulsa Ozonizar ahora."; }
+    acts = '<button class="btn btn-primary" id="hNow" data-cmd>Ozonizar ahora</button><button class="btn btn-light" id="hAdd">+ Programar</button>';
+  }
+  if (acts !== paintHero.a){ paintHero.a = acts; $("heroActs").innerHTML = acts; paintLock(); }
+  const fab = $("fab"); fab.style.display = run ? "none" : "";
+}
+function paint(force){ paintHero(); paintCal(); paintDay(); }
+onChange(paint);
+$("heroActs").onclick = (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "hStop") stopSession(); else if (b.id === "hNow") quick(); else if (b.id === "hAdd") openEditor(null, { date: ymd(sel < hoy0() ? addDays(new Date(), 1) : sel) });
+};
+$("fab").onclick = quick;
+$("stopBtn").onclick = paroTotal;
+
+/* Ozonizar ahora: elegir área y arrancar, sin pasar por el calendario */
+function quick(){
+  openSheet("Ozonizar ahora", (body, close) => {
+    body.innerHTML = '<div id="qArea"></div><div class="qs-time"><em id="qT">27:00</em><span id="qN"></span></div><button class="btn btn-primary" id="qGo" style="padding:14px;font-size:15px">Iniciar ozonización</button>';
+    const upd = () => { const c = calc(S.area); body.querySelector("#qT").textContent = mmss(c.sec); body.querySelector("#qN").textContent = fmtMin(c.min) + " · " + (S.area * CFG.h).toFixed(0) + " m³ · " + fmtDim(S.area) + (c.capped ? " · tope de sesión" : ""); };
+    areaPicker(body.querySelector("#qArea"), { get: () => S.area, set: (v) => { setArea(v); upd(); }, dim: false });
+    upd();
+    body.querySelector("#qGo").onclick = () => { if (startSession(calc(S.area).sec)) close(); };
+  });
+}
+paint(); paintLock(); paintAlert();
+</script>
+</body>
+</html>

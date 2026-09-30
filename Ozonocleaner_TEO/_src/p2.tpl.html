@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ozonocleaner TEO · Propuesta 2 · Habitación</title>
+<meta name="description" content="Propuesta 2: se dibuja la habitación arrastrando una esquina y el dial marca el tiempo. Tres pestañas: Ozonizar, Agenda y Ajustes.">
+<meta name="theme-color" content="#2E2A5C">
+<link rel="icon" href="{{FAVICON}}">
+<style>
+/*@BASE_CSS@*/
+
+/* ===== Propuesta 2 · Habitación ===== */
+body{padding-bottom:96px}
+.app{gap:12px}
+.tabs{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;
+  padding:8px 14px max(10px,env(safe-area-inset-bottom));
+  background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+}
+.tabs nav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;max-width:472px}
+.tabs button{
+  display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;border:0;border-radius:14px;background:transparent;
+  font-size:11px;font-weight:650;color:var(--muted);transition:color .2s,background .2s;
+}
+.tabs button svg{width:21px;height:21px}
+.tabs button[aria-selected="true"]{color:var(--o3);background:var(--o3-bg)}
+@media (min-width:760px){
+  body{padding-bottom:40px}
+  .tabs{position:static;background:none;border:0;backdrop-filter:none;padding:0;margin:0 0 4px}
+  .tabs nav{max-width:520px;margin-inline:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:4px}
+  .tabs button{flex-direction:row;justify-content:center;gap:8px;font-size:13px;padding:9px}
+  .tabs button svg{width:18px;height:18px}
+  .app{max-width:720px}
+}
+.pane{display:none;flex-direction:column;gap:12px}
+.pane.show{display:flex;animation:tswap 200ms ease-out}
+@keyframes tswap{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.stage{padding:14px 14px 16px;display:flex;flex-direction:column;gap:12px}
+.head{display:flex;align-items:center;gap:8px}
+.head .hint{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.cv{
+  position:relative;height:250px;border-radius:18px;overflow:hidden;touch-action:none;
+  background:var(--surface-2);border:1px solid var(--line);
+  background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+  background-size:var(--m) var(--m);
+}
+.rm{
+  position:absolute;left:14px;top:14px;border:2px solid var(--o3);border-radius:8px;background:var(--o3-bg);
+  transition:box-shadow .4s;
+}
+.cv.drag .rm{transition:none}
+.cv.live .rm{box-shadow:0 0 0 6px var(--o3-bg),0 0 44px -6px var(--o3-glow)}
+.cv .tag{position:absolute;right:12px;top:10px;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:1px;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);pointer-events:none}
+.cv .tag b{font-size:24px;font-weight:300;color:var(--ink);font-family:var(--sans);letter-spacing:-.02em}
+.hnd{
+  position:absolute;right:-16px;bottom:-16px;width:32px;height:32px;border-radius:50%;background:var(--surface);
+  border:3px solid var(--o3);box-shadow:0 6px 14px -4px rgba(0,0,0,.45);cursor:nwse-resize;z-index:4;touch-action:none;
+  display:grid;place-items:center;
+}
+.hnd::before{content:"";width:10px;height:10px;border-right:2px solid var(--o3);border-bottom:2px solid var(--o3);transform:translate(-1px,-1px)}
+.hnd::after{content:"";position:absolute;inset:-9px;border-radius:50%}
+.cv.live .hnd{opacity:.4;pointer-events:none}
+.dims{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dm{display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:15px;padding:6px}
+.dm .step{width:36px;height:36px;font-size:18px;border-radius:11px}
+.dm div{flex:1;text-align:center;line-height:1.15}
+.dm span{display:block;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dm b{font-size:18px;font-weight:450;font-variant-numeric:tabular-nums}
+
+.dial{display:grid;place-items:center;position:relative;padding:4px 0}
+.dial>*{grid-area:1 / 1}
+.dial .ring-svg{width:228px;height:228px}
+.dial .ring-svg circle{stroke-width:5}
+.dial .mid{text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;z-index:2}
+.dial .mid em{font-style:normal;font-size:52px;font-weight:220;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1}
+.dial .mid span{font-size:11.5px;color:var(--muted);letter-spacing:.03em}
+.dial .mid .badge{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--o3);margin-bottom:2px}
+.dial .in{position:relative;width:174px;height:174px;border-radius:50%;overflow:hidden;z-index:1;opacity:.9}
+.go{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:56px;border-radius:18px;border:0;
+  font-size:16px;font-weight:700;letter-spacing:.01em;color:var(--on-o3);
+  background:linear-gradient(140deg,var(--o3),color-mix(in srgb,var(--o3) 45%,var(--azul)));
+  box-shadow:0 16px 30px -16px color-mix(in srgb,var(--o3) 95%,transparent);transition:transform .14s,background .2s;
+}
+.go:active{transform:scale(.98)}
+.go svg{width:20px;height:20px}
+.go.stopm{background:var(--stop-bg);color:var(--stop);border:1px solid color-mix(in srgb,var(--stop) 40%,var(--line));box-shadow:none}
+.mini{display:flex;align-items:center;gap:10px;padding:11px 14px;font-size:12.5px;color:var(--ink-2)}
+.mini svg{width:18px;height:18px;color:var(--o3);flex:none}
+.mini b{color:var(--ink)}
+
+.pad-card{padding:14px 15px 15px;display:flex;flex-direction:column;gap:11px}
+.dia{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:650;margin:6px 2px -4px}
+.oc{display:flex;align-items:center;gap:12px;padding:10px 14px}
+.oc .t{font-family:var(--mono);font-size:17px;font-weight:500;min-width:52px}
+.oc .m{flex:1;min-width:0;font-size:13px;font-weight:650}
+.oc .m span{display:block;font-size:11.5px;color:var(--muted);font-weight:450;margin-top:2px}
+.oc .r{font-size:11.5px;color:var(--o3);font-weight:650;font-family:var(--mono)}
+</style>
+</head>
+<body>
+{{SPLASH}}
+<div class="app shell">
+  {{CHROME}}
+
+  <main>
+   <section class="pane show" id="p-now" aria-label="Ozonizar">
+    <div class="card stage">
+      <div class="head"><span class="eyebrow">Dibuja el área</span><span class="chip" id="modeChip" data-mode="idle"><i></i><span id="modeText">En reposo</span></span></div>
+      <div class="cv" id="cv"><div class="rm" id="rm"><div id="rmBub"></div><div class="hnd" id="hnd" role="slider" tabindex="0" aria-label="Tamaño de la habitación: flechas para ajustar"></div></div><div class="tag"><b><span id="rArea">18</span> m²</b><span id="rDims"></span></div></div>
+      <div class="dims" id="dims">
+        <div class="dm"><button class="step" data-a="w-" aria-label="Menos ancho">&minus;</button><div><span>Ancho</span><b id="vW">4.0 m</b></div><button class="step" data-a="w+" aria-label="Más ancho">+</button></div>
+        <div class="dm"><button class="step" data-a="l-" aria-label="Menos largo">&minus;</button><div><span>Largo</span><b id="vL">4.5 m</b></div><button class="step" data-a="l+" aria-label="Más largo">+</button></div>
+      </div>
+      <div class="chips" id="presets"></div>
+    </div>
+
+    <div class="card stage" id="dialCard">
+      <div class="head"><span class="eyebrow">Tiempo de ozonización</span><span class="hint" id="dHint"></span></div>
+      <div class="dial">
+        <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="46" pathLength="100"/><circle class="fg" id="ringFg" cx="50" cy="50" r="46" pathLength="100"/></svg>
+        <div class="in" id="dialBub"></div>
+        <div class="mid"><span class="badge" id="dBadge">Listo</span><em id="dTime">27:00</em><span id="dNote">calculado con el área</span></div>
+      </div>
+      <button class="go" id="go" data-cmd>{{PWR}} <span id="goTxt">Iniciar ozonización</span></button>
+    </div>
+    <div class="card mini" id="mini"></div>
+    <button class="stop" id="stopBtn" data-cmd>{{STOPICON}} Paro total</button>
+   </section>
+
+   <section class="pane" id="p-agenda" aria-label="Agenda">
+    <div class="card pad-card">
+      <div class="head"><span class="eyebrow">Programaciones</span><button class="btn btn-primary" id="addBtn" style="margin-left:auto;padding:7px 13px;font-size:12.5px">+ Programar</button></div>
+      <div id="list"></div>
+    </div>
+    <div class="head" style="padding:0 4px"><span class="eyebrow">Próximas ejecuciones</span></div>
+    <div id="occ" style="display:flex;flex-direction:column;gap:8px"></div>
+   </section>
+
+   <section class="pane" id="p-set" aria-label="Ajustes">
+    <div class="card pad-card"><span class="eyebrow">Cálculo del tiempo</span><div id="cfg"></div></div>
+    <div class="card pad-card"><span class="eyebrow">Equipo</span>
+      <p style="margin:0;font-size:12.5px;line-height:1.6;color:var(--ink-2)">La tarjeta cuenta el tiempo y abre el relé sola; la app solo elige el área y envía la orden. El <b>modo nocturno</b> se cambia con el botón de la esquina superior.</p>
+    </div>
+   </section>
+  </main>
+
+  <footer class="foot"><p class="sig"><span>RPI Ingeniería</span><i></i><span>Propuesta <b>2</b></span></p></footer>
+</div>
+
+<div class="tabs"><nav role="tablist" aria-label="Secciones">
+  <button role="tab" aria-selected="true" data-t="p-now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M8 5v14M3.5 12H8"/></svg>Ozonizar</button>
+  <button role="tab" aria-selected="false" data-t="p-agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Agenda</button>
+  <button role="tab" aria-selected="false" data-t="p-set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>Ajustes</button>
+</nav></div>
+<div class="toast" id="toast" style="bottom:88px"></div>
+
+<script>
+/*@CORE_JS@*/
+
+/* ===== Propuesta 2 ===== */
+const M = 22, WMIN = 2, WMAX = 12, LMAX = 10;             // px por metro y límites de cada lado
+document.getElementById("cv").style.setProperty("--m", M + "px");
+bubbles($("rmBub"), 14, 170); bubbles($("dialBub"), 12, 170);
+cfgPanel($("cfg")); bindRows($("list"));
+
+/* Ancho y largo salen del área guardada (proporción 4:3) hasta que el usuario los toca. */
+let W = 0, L = 0;
+function dimsFromArea(a){ W = Math.round(Math.sqrt(a * 4 / 3) * 2) / 2; L = Math.round(a / W * 2) / 2; }
+const saved = jget("oz.wl", null);
+if (saved && Math.abs(saved.w * saved.l - S.area) < 1) { W = saved.w; L = saved.l; } else dimsFromArea(S.area);
+function applyDims(w, l){
+  w = clamp(Math.round(w * 2) / 2, WMIN, WMAX); l = clamp(Math.round(l * 2) / 2, WMIN, LMAX);
+  const a = w * l; if (a < AREA_MIN || a > AREA_MAX) return false;
+  W = w; L = l; store.set("oz.wl", JSON.stringify({ w: W, l: L })); setArea(a); return true;
+}
+$("dims").onclick = (e) => {
+  const b = e.target.closest("[data-a]"); if (!b) return;
+  const [k, s] = [b.dataset.a[0], b.dataset.a[1] === "+" ? .5 : -.5];
+  applyDims(k === "w" ? W + s : W, k === "l" ? L + s : L);
+};
+const cv = $("cv"), hnd = $("hnd");
+hnd.addEventListener("pointerdown", e => { hnd.setPointerCapture(e.pointerId); cv.classList.add("drag"); e.preventDefault(); });
+hnd.addEventListener("pointermove", e => {
+  if (!hnd.hasPointerCapture(e.pointerId)) return;
+  const r = cv.getBoundingClientRect();
+  applyDims((e.clientX - r.left - 14) / M, (e.clientY - r.top - 14) / M);
+});
+["pointerup", "pointercancel"].forEach(ev => hnd.addEventListener(ev, () => cv.classList.remove("drag")));
+hnd.addEventListener("keydown", e => {
+  const m = { ArrowRight: [.5, 0], ArrowLeft: [-.5, 0], ArrowDown: [0, .5], ArrowUp: [0, -.5] }[e.key];
+  if (m){ e.preventDefault(); applyDims(W + m[0], L + m[1]); }
+});
+$("presets").innerHTML = PRESETS.map(p => `<button class="qc" data-a="${p.a}">${p.n}<small>${p.a} m²</small></button>`).join("");
+$("presets").onclick = (e) => { const b = e.target.closest(".qc"); if (b){ dimsFromArea(+b.dataset.a); applyDims(W, L) || setArea(+b.dataset.a); } };
+
+let sigList = "", sigOcc = "";
+function paint(){
+  const a = S.area, c = calc(a), run = running();
+  const rm = $("rm"); rm.style.width = (W * M) + "px"; rm.style.height = (L * M) + "px";
+  $("rArea").textContent = Number.isInteger(a) ? a : a.toFixed(1); $("rDims").textContent = W.toFixed(1) + " × " + L.toFixed(1) + " m";
+  $("vW").textContent = W.toFixed(1) + " m"; $("vL").textContent = L.toFixed(1) + " m";
+  hnd.setAttribute("aria-valuetext", W + " por " + L + " metros");
+  $("presets").querySelectorAll(".qc").forEach(q => q.setAttribute("aria-pressed", (+q.dataset.a === a) + ""));
+  cv.classList.toggle("live", run);
+  $("modeChip").dataset.mode = run ? "run" : "idle"; $("modeText").textContent = run ? "Ozonizando" : "En reposo";
+  $("dHint").textContent = c.vol.toFixed(0) + " m³ × " + CFG.k.toFixed(2) + " min/m³";
+  $("dBadge").textContent = run ? "Ozonizando" : (c.capped ? "Tope" : "Listo");
+  $("dTime").textContent = mmss(run ? S.timerSec : c.sec);
+  $("dNote").textContent = run ? "termina " + HORA(new Date(Date.now() + S.timerSec * 1000)) : "calculado con el área";
+  ring($("ringFg"), frac());
+  $("dialCard").classList.toggle("on", run);
+  document.querySelectorAll(".bub").forEach(b => b.classList.toggle("live", run));
+  $("go").classList.toggle("stopm", run);
+  $("goTxt").textContent = run ? "Detener" : "Iniciar · " + fmtMin(c.min);
+  const nx = upcoming(1)[0];
+  $("mini").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>' +
+    (nx ? "Próxima: <b>" + whenTxt(nx.at) + "</b> · " + esc(nx.s.label || "Sesión") + " · " + relTxt(nx.at) : "Sin sesiones programadas") + "</span>";
+  const sig = JSON.stringify(sched);
+  if (sig !== sigList){ sigList = sig; $("list").innerHTML = sched.length ? sched.slice().sort(byTime).map(schedRowHTML).join("") : '<div class="vacio">Aún no hay programaciones.</div>'; }
+  const occ = upcoming(12), so = sig + occ.length + (occ[0] ? occ[0].at.getTime() : "");
+  if (so !== sigOcc){
+    sigOcc = so; let dia = "", h = "";
+    occ.forEach(o => {
+      const k = ymd(o.at); if (k !== dia){ dia = k; const t = whenTxt(o.at).split(" ")[0]; h += `<div class="dia">${t === "Hoy" || t === "Mañana" ? t : DIAS_LARGO[o.at.getDay()] + " " + o.at.getDate() + "/" + pad2(o.at.getMonth() + 1)}</div>`; }
+      h += `<div class="card oc"><span class="t">${HORA(o.at)}</span><div class="m">${esc(o.s.label || "Sesión")}<span>${o.s.area} m² · ${fmtMin(calc(o.s.area).min)}</span></div><span class="r">${relTxt(o.at)}</span></div>`;
+    });
+    $("occ").innerHTML = h || '<div class="vacio">No hay ejecuciones próximas.</div>';
+  }
+}
+onChange(paint);
+$("go").onclick = () => running() ? stopSession() : startSession(calc(S.area).sec);
+$("stopBtn").onclick = paroTotal;
+$("addBtn").onclick = () => openEditor(null);
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.setAttribute("aria-selected", (x === b) + ""));
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("show", p.id === b.dataset.t));
+  scrollTo({ top: 0 });
+});
+paint(); paintLock(); paintAlert();
+</script>
+</body>
+</html>

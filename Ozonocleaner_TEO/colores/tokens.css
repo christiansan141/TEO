@@ -1,0 +1,98 @@
+/* Variables de color de Ozonocleaner TEO (las mismas que usan las tres propuestas).
+   Los nombres de Teo se conservan; se agregan --o3, --o3-deep, --o3-glow, --o3-bg y --on-o3. */
+:root{
+  --r:20px;
+  --row:40px;
+  --sans:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,"Helvetica Neue",sans-serif;
+  --mono:"Cascadia Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --ground:#E9EDF6;
+  --surface:#FFFFFF;
+  --surface-2:#F2F5FC;
+  --line:#DBE2F0;
+  --line-soft:#EAEEF7;
+  --ink:#231F20;
+  --ink-2:#565B6C;
+  --muted:#8A91A6;
+  --chip:#EDF1FA;
+  --azul:#1D71B8;
+  --indigo:#2E2A5C;
+  --indigo-fill:#2E2A5C;
+  --o3:#08807D;
+  --o3-deep:#05595C;
+  --o3-glow:#12A099;
+  --o3-bg:rgba(8,128,125,.13);
+  --on-o3:#FFFFFF;
+  --aviso:#B96A12;
+  --aviso-bg:rgba(232,149,44,.16);
+  --ok:#1B8F62;
+  --ok-bg:rgba(27,143,98,.12);
+  --stop:#B23A2B;
+  --stop-bg:rgba(178,58,43,.09);
+  --lg-blue:#3466AE;
+  --lg-k1:#29265B;
+  --lg-k2:#2E2B7A;
+  --lg-arc:#313132;
+  --shadow:0 22px 50px -30px rgba(46,42,92,.55), 0 1px 2px rgba(46,42,92,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E0E22;
+    --surface:#191934;
+    --surface-2:#212143;
+    --line:#2D2D55;
+    --line-soft:#242449;
+    --ink:#EDEFF8;
+    --ink-2:#AEB4CB;
+    --muted:#7B8299;
+    --chip:#242449;
+    --azul:#57A3E4;
+    --indigo:#9A92F0;
+    --indigo-fill:#2E2A5C;
+    --o3:#4FD8CC;
+    --o3-deep:#16716F;
+    --o3-glow:#2FB5AC;
+    --o3-bg:rgba(79,216,204,.15);
+    --on-o3:#062B2A;
+    --aviso:#F2A83F;
+    --aviso-bg:rgba(242,168,63,.16);
+    --ok:#3EC38C;
+    --ok-bg:rgba(62,195,140,.14);
+    --stop:#E0705F;
+    --stop-bg:rgba(224,112,95,.12);
+    --lg-blue:#7FAEE8;
+    --lg-k1:#8F8AE6;
+    --lg-k2:#A9A2F5;
+    --lg-arc:#8A90A6;
+    --shadow:0 24px 60px -34px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E0E22;
+  --surface:#191934;
+  --surface-2:#212143;
+  --line:#2D2D55;
+  --line-soft:#242449;
+  --ink:#EDEFF8;
+  --ink-2:#AEB4CB;
+  --muted:#7B8299;
+  --chip:#242449;
+  --azul:#57A3E4;
+  --indigo:#9A92F0;
+  --indigo-fill:#2E2A5C;
+  --o3:#4FD8CC;
+  --o3-deep:#16716F;
+  --o3-glow:#2FB5AC;
+  --o3-bg:rgba(79,216,204,.15);
+  --on-o3:#062B2A;
+  --aviso:#F2A83F;
+  --aviso-bg:rgba(242,168,63,.16);
+  --ok:#3EC38C;
+  --ok-bg:rgba(62,195,140,.14);
+  --stop:#E0705F;
+  --stop-bg:rgba(224,112,95,.12);
+  --lg-blue:#7FAEE8;
+  --lg-k1:#8F8AE6;
+  --lg-k2:#A9A2F5;
+  --lg-arc:#8A90A6;
+  --shadow:0 24px 60px -34px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.4);
+}

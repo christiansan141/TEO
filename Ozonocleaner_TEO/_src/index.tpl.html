@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ozonocleaner TEO · Propuestas de frontend</title>
+<meta name="description" content="Comparador de las tres propuestas de frontend para Ozonocleaner TEO, con bocetos, colores, logos e ideas.">
+<meta name="theme-color" content="#2E2A5C">
+<link rel="icon" href="{{FAVICON}}">
+<style>
+/*@BASE_CSS@*/
+
+/* ===== Comparador ===== */
+body{padding:20px 16px 60px}
+.wrap{max-width:1180px;margin-inline:auto;display:flex;flex-direction:column;gap:28px}
+.hero-i{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hero-i .mark{width:56px;height:47px}
+.hero-i h1{margin:0;font-size:28px;font-weight:300;letter-spacing:-.02em}
+.hero-i h1 b{font-weight:700;color:var(--o3)}
+.hero-i p{margin:4px 0 0;font-size:13.5px;color:var(--ink-2);max-width:62ch;line-height:1.55}
+.hero-i .grow{flex:1;min-width:240px}
+h2{margin:0 0 4px;font-size:19px;font-weight:650;letter-spacing:-.01em}
+.sub{margin:0 0 14px;font-size:13px;color:var(--ink-2);line-height:1.55;max-width:80ch}
+.props{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;align-items:start}
+.prop{padding:16px;display:flex;flex-direction:column;gap:12px}
+.prop h3{margin:0;font-size:16px;font-weight:650}
+.prop h3 span{color:var(--o3);margin-right:6px;font-family:var(--mono)}
+.prop p{margin:0;font-size:12.5px;line-height:1.55;color:var(--ink-2)}
+.prop ul{margin:0;padding-left:18px;font-size:12.5px;line-height:1.6;color:var(--ink-2)}
+.prop b{color:var(--ink)}
+.frame{border:1px solid var(--line);border-radius:26px;overflow:hidden;background:var(--ground);height:640px;position:relative;box-shadow:var(--shadow)}
+.frame iframe{border:0;width:390px;height:844px;transform-origin:0 0;transform:scale(.758);display:block}
+@media (max-width:420px){ .frame{height:560px} .frame iframe{transform:scale(.68)} }
+.open{display:flex;gap:10px}
+.open a{flex:1;text-align:center;text-decoration:none;color:inherit;display:block}
+.tbl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.idea{padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.idea b{font-size:14px;font-weight:650}
+.idea p{margin:0;font-size:12.5px;line-height:1.55;color:var(--ink-2)}
+.tag{display:inline-block;align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--o3-bg);color:var(--o3)}
+.tag.hw{background:var(--aviso-bg);color:var(--aviso)}
+.formula{padding:16px 18px;font-size:13px;line-height:1.7;color:var(--ink-2)}
+.formula code{font-family:var(--mono);color:var(--ink);background:var(--surface-2);padding:2px 7px;border-radius:7px}
+.imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.imgs a{display:block;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+.imgs img{display:block;width:100%;height:auto}
+.imgs figcaption{padding:8px 12px;font-size:11.5px;color:var(--ink-2);background:var(--surface)}
+.imgs figure{margin:0}
+.bar{display:flex;align-items:center;gap:10px}
+</style>
+</head>
+<body>
+{{SPLASH}}
+<div class="wrap shell">
+  <header class="hero-i">
+    {{MARK}}
+    <div class="grow"><h1>Ozono<b>cleaner</b> TEO</h1>
+      <p>Tres propuestas de frontend para el ozonizador de ambientes. Misma tarjeta que Teo (un relé, sensores táctiles y una OLED), misma paleta índigo y azul de TK, modo nocturno y animaciones de Teo. Cada una programa por calendario y define el área para calcular el tiempo.</p></div>
+    <button class="icon-btn theme-btn" id="themeBtn" data-icon="moon" aria-label="Cambiar a tema oscuro">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.7v2M12 19.3v2M4.4 4.4l1.4 1.4M18.2 18.2l1.4 1.4M2.7 12h2M19.3 12h2M4.4 19.6l1.4-1.4M18.2 5.8l1.4-1.4"/></svg>
+    </button>
+  </header>
+
+  <section>
+    <h2>Las tres propuestas</h2>
+    <p class="sub">Son funcionales en modo demostración: se puede elegir el área, iniciar una sesión, programar y cambiar el modo nocturno. Con el botón Conectar usan el mismo Bluetooth de Teo.</p>
+    <div class="props">
+      <article class="card prop">
+        <h3><span>01</span>Panel</h3>
+        <div class="frame"><iframe data-src="propuesta-1-panel.html" title="Propuesta 1 · Panel" loading="lazy"></iframe></div>
+        <p>Una sola pantalla, la más cercana a Teo. El plano de la habitación crece con el área, la salida es el gran botón central con un anillo de progreso y la programación queda al pie.</p>
+        <ul><li><b>Área:</b> presets, paso ±1 y deslizador.</li><li><b>Ventaja:</b> todo a la vista, poco que aprender.</li><li><b>Riesgo:</b> pantalla larga en teléfono.</li></ul>
+        <div class="open"><a class="btn btn-primary" href="propuesta-1-panel.html">Abrir completa</a></div>
+      </article>
+      <article class="card prop">
+        <h3><span>02</span>Habitación</h3>
+        <div class="frame"><iframe data-src="propuesta-2-habitacion.html" title="Propuesta 2 · Habitación" loading="lazy"></iframe></div>
+        <p>El área se dibuja: se arrastra la esquina de la habitación y el dial de tiempo se ajusta solo. Tres pestañas: Ozonizar, Agenda y Ajustes.</p>
+        <ul><li><b>Área:</b> ancho × largo, arrastre y presets.</li><li><b>Ventaja:</b> se entiende el espacio que se va a tratar.</li><li><b>Riesgo:</b> exige más pulso fino en el móvil.</li></ul>
+        <div class="open"><a class="btn btn-primary" href="propuesta-2-habitacion.html">Abrir completa</a></div>
+      </article>
+      <article class="card prop">
+        <h3><span>03</span>Agenda</h3>
+        <div class="frame"><iframe data-src="propuesta-3-agenda.html" title="Propuesta 3 · Agenda" loading="lazy"></iframe></div>
+        <p>El calendario es la pantalla principal: la próxima sesión arriba, el mes en el centro y un botón flotante para ozonizar ahora sin pasar por la agenda.</p>
+        <ul><li><b>Área:</b> se elige al programar o en «Ozonizar ahora».</li><li><b>Ventaja:</b> ideal si casi todo se programa.</li><li><b>Riesgo:</b> el uso manual queda a un toque más.</li></ul>
+        <div class="open"><a class="btn btn-primary" href="propuesta-3-agenda.html">Abrir completa</a></div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cómo se calcula el tiempo <span class="tag hw" style="vertical-align:middle;margin-left:6px">provisional</span></h2>
+    <div class="card formula">
+      <code>volumen (m³) = área (m²) × altura (m)</code> &nbsp;→&nbsp; <code>minutos = volumen × factor (min/m³)</code>, con un tope de sesión.<br>
+      Valores iniciales: altura <b>2.5 m</b>, factor <b>0.60 min/m³</b>, tope <b>120 min</b>. Ejemplo: 18 m² → 45 m³ → <b>27 min</b>. Los tres valores se editan en la propia app y se guardan en el teléfono; hay que reemplazarlos con mediciones del generador real.
+    </div>
+  </section>
+
+  <section>
+    <h2>Ideas para generar valor</h2>
+    <p class="sub">No están dibujadas en las propuestas. Las etiquetas indican si piden algo más que la app con la tarjeta actual.</p>
+    <div class="tbl">
+      <div class="card idea"><span class="tag">app + firmware</span><b>Cuenta de salida y espera de reingreso</b><p>Antes de encender, una cuenta regresiva para salir del ambiente; al terminar, un aviso «ventile antes de entrar» en la app y en la OLED. El ozono es irritante y esta es la seguridad más evidente.</p></div>
+      <div class="card idea"><span class="tag hw">hardware</span><b>Contacto de puerta o sensor de presencia</b><p>Corta la sesión si alguien abre o entra. Se conecta a una entrada libre de la tarjeta.</p></div>
+      <div class="card idea"><span class="tag">app</span><b>Perfiles por tipo de ambiente</b><p>Cada perfil (baño, cabina, consultorio, sala) con su altura y su factor propios, y un nivel «desinfección / desodorización».</p></div>
+      <div class="card idea"><span class="tag">app + firmware</span><b>Historial de sesiones</b><p>Registro de fecha, área, duración y quién la inició, con exportación a CSV. Sirve como evidencia de limpieza.</p></div>
+      <div class="card idea"><span class="tag">app</span><b>Certificado con QR por ambiente</b><p>Una página con «ambiente ozonizado el día X a la hora Y» que se puede pegar en la puerta o enviar al cliente.</p></div>
+      <div class="card idea"><span class="tag hw">firmware</span><b>Programación que corre sin la app</b><p>La tarjeta necesita reloj propio (RTC o NTP por Wi-Fi) y una orden nueva en el protocolo. Sin eso, la programación de estas maquetas solo dispara con la página abierta.</p></div>
+      <div class="card idea"><span class="tag">app</span><b>Varios equipos y ambientes</b><p>Una lista de equipos con nombre («Sala 1», «Baño 2»), cada uno con su área y su agenda.</p></div>
+      <div class="card idea"><span class="tag hw">hardware</span><b>Horas de uso y mantenimiento</b><p>Contador de horas del generador con aviso para cambiar placas o filtros.</p></div>
+      <div class="card idea"><span class="tag hw">hardware</span><b>Sensor de ozono (ppm)</b><p>Cierra el lazo: en lugar de tiempo fijo, se ozoniza hasta alcanzar la concentración objetivo y se muestra cuándo es seguro entrar.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Bocetos, colores y logos</h2>
+    <div class="imgs">
+      <figure class="card"><a href="bocetos/boceto-1-panel.svg"><img src="bocetos/boceto-1-panel.svg" alt="Boceto de la propuesta 1"></a><figcaption>Boceto · Propuesta 1</figcaption></figure>
+      <figure class="card"><a href="bocetos/boceto-2-habitacion.svg"><img src="bocetos/boceto-2-habitacion.svg" alt="Boceto de la propuesta 2"></a><figcaption>Boceto · Propuesta 2</figcaption></figure>
+      <figure class="card"><a href="bocetos/boceto-3-agenda.svg"><img src="bocetos/boceto-3-agenda.svg" alt="Boceto de la propuesta 3"></a><figcaption>Boceto · Propuesta 3</figcaption></figure>
+      <figure class="card"><a href="bocetos/boceto-oled-pantallas.svg"><img src="bocetos/boceto-oled-pantallas.svg" alt="Pantallas de la OLED"></a><figcaption>Pantallas de la OLED · borrador</figcaption></figure>
+      <figure class="card"><a href="colores/paleta.svg"><img src="colores/paleta.svg" alt="Paleta de colores"></a><figcaption>Paleta · modo claro y nocturno</figcaption></figure>
+      <figure class="card"><a href="logos/ozonocleaner-logo-claro.svg"><img src="logos/ozonocleaner-logo-claro.svg" alt="Logo claro"></a><figcaption>Logo claro</figcaption></figure>
+      <figure class="card"><a href="logos/ozonocleaner-logo-oscuro.svg"><img src="logos/ozonocleaner-logo-oscuro.svg" alt="Logo oscuro"></a><figcaption>Logo oscuro</figcaption></figure>
+      <figure class="card"><a href="logos/icono-app-redondeado.svg"><img src="logos/icono-app-redondeado.svg" alt="Icono de la app" style="max-width:220px;margin:12px auto"></a><figcaption>Icono de la app</figcaption></figure>
+    </div>
+  </section>
+  <footer class="foot"><p class="sig"><span>RPI Ingeniería</span><i></i><span>Ozonocleaner TEO · Frontend</span></p></footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k, v){ try { localStorage.setItem(k, v); } catch {} } };
+const themeBtn = $("themeBtn"), mq = matchMedia("(prefers-color-scheme: dark)");
+const oscuro = () => { const t = document.documentElement.getAttribute("data-theme"); return t ? t === "dark" : mq.matches; };
+function pintar(){
+  const o = oscuro(); themeBtn.dataset.icon = o ? "sun" : "moon";
+  themeBtn.setAttribute("aria-label", o ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+  document.querySelectorAll("iframe").forEach(f => { const u = f.dataset.src + "?tema=" + (o ? "dark" : "light"); if (f.getAttribute("src") !== u) f.setAttribute("src", u); });
+}
+themeBtn.onclick = () => { const n = oscuro() ? "light" : "dark"; document.documentElement.setAttribute("data-theme", n); store.set("tk.theme", n); pintar(); };
+const g = store.get("tk.theme"); if (g) document.documentElement.setAttribute("data-theme", g);
+mq.addEventListener("change", () => { if (!store.get("tk.theme")) pintar(); });
+pintar();
+</script>
+</body>
+</html>

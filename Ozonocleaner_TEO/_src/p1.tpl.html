@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ozonocleaner TEO · Propuesta 1 · Panel</title>
+<meta name="description" content="Propuesta 1: panel de una sola pantalla, en la línea de Teo. Área con plano, salida central y programación al pie.">
+<meta name="theme-color" content="#2E2A5C">
+<link rel="icon" href="{{FAVICON}}">
+<style>
+/*@BASE_CSS@*/
+
+/* ===== Propuesta 1 · Panel ===== */
+.grid{display:flex;flex-direction:column;gap:10px}
+.rail{display:flex;flex-direction:column;gap:10px;min-width:0}
+@media (min-width:760px){
+  body{padding:26px 22px 48px}
+  .app{max-width:900px;gap:16px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .rail{gap:16px}
+}
+@media (min-width:1100px){
+  .app{max-width:1120px}
+  .grid{grid-template-columns:minmax(0,1.15fr) minmax(360px,1fr)}
+}
+.pad-card{padding:14px 15px 15px;display:flex;flex-direction:column;gap:13px}
+.head{display:flex;align-items:center;gap:8px}
+.head .hint{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+/* Plano de la habitación: crece con el área y se puede leer de un vistazo */
+.plan{position:relative;height:224px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.room{
+  position:relative;border:2px solid var(--o3);border-radius:10px;
+  background-color:var(--o3-bg);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:var(--m) var(--m);background-position:-1px -1px;
+  transition:width .35s cubic-bezier(.22,1,.36,1),height .35s cubic-bezier(.22,1,.36,1),box-shadow .4s;
+}
+.room .door{position:absolute;left:14%;bottom:-3px;width:26px;height:4px;background:var(--surface-2);border-radius:2px}
+.plan .tag{position:absolute;left:12px;bottom:10px;display:flex;align-items:baseline;gap:8px;font-size:11.5px;color:var(--ink-2);font-family:var(--mono)}
+.plan .tag b{font-size:21px;font-weight:350;color:var(--ink);font-family:var(--sans);letter-spacing:-.02em}
+.room .dw,.room .dl{position:absolute;font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
+.room .dw{left:50%;top:-20px;transform:translateX(-50%)}
+.room .dl{right:-9px;top:50%;transform:translate(100%,-50%)}
+.plan.live .room{box-shadow:0 0 0 6px var(--o3-bg),0 0 40px -6px var(--o3-glow)}
+.plan .bub{z-index:1}
+.calc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.calc div{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:14px;padding:9px 6px;text-align:center}
+.calc span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.calc b{display:block;margin-top:3px;font-size:19px;font-weight:400;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.calc div.dur b{color:var(--o3);font-weight:600}
+details.aj{border-top:1px solid var(--line-soft);padding-top:10px}
+details.aj summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink-2);list-style:none;display:flex;align-items:center;gap:8px}
+details.aj summary::-webkit-details-marker{display:none}
+details.aj summary::after{content:"";margin-left:auto;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+details.aj[open] summary::after{transform:rotate(-135deg)}
+details.aj>div{margin-top:12px}
+
+/* Salida */
+.power-card{padding:14px 16px 17px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color .3s}
+.power-card .eyebrow{align-self:flex-start}
+.power-card.on{border-color:color-mix(in srgb,var(--o3) 45%,var(--line))}
+.pw-stage{position:relative;display:grid;place-items:center;width:168px;height:168px;margin-top:4px}
+.pw-stage>*{grid-area:1 / 1}
+.pw-stage .ring-svg{width:168px;height:168px}
+.power-state{margin-top:6px}
+.live{display:flex;flex-direction:column;align-items:center;gap:2px}
+.live em{font-style:normal;font-size:44px;font-weight:250;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.05}
+.live span{font-size:11.5px;color:var(--muted);letter-spacing:.03em}
+
+/* Programación */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.week div{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;border-radius:12px;font-size:10px;color:var(--muted);font-weight:650;letter-spacing:.06em}
+.week b{font-size:14px;font-weight:500;color:var(--ink);letter-spacing:0}
+.week i{width:5px;height:5px;border-radius:50%;background:transparent}
+.week .has i{background:var(--o3)}
+.week .hoy{background:var(--o3-bg)}
+.week .hoy b{color:var(--o3);font-weight:700}
+.next{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.next b{color:var(--ink);font-weight:650}
+</style>
+</head>
+<body>
+{{SPLASH}}
+<div class="app">
+  {{CHROME}}
+  <div class="grid">
+    <section class="card pad-card" id="areaCard">
+      <div class="head"><span class="eyebrow">Área a ozonizar</span><span class="chip" id="modeChip" data-mode="idle"><i></i><span id="modeText">En reposo</span></span></div>
+      <div class="plan" id="plan">
+        <div class="room" id="room">
+          <span class="dw" id="dW"></span><span class="dl" id="dL"></span><span class="door"></span>
+          <div id="roomBub"></div>
+        </div>
+        <div class="tag"><b><span id="rArea">18</span> m²</b><span id="rVol">45 m³</span></div>
+      </div>
+      <div id="ap1"></div>
+      <div class="calc">
+        <div><span>Volumen</span><b id="cVol">45 m³</b></div>
+        <div><span>Factor</span><b id="cK">0.60</b></div>
+        <div class="dur"><span>Tiempo</span><b id="cMin">27 min</b></div>
+      </div>
+      <details class="aj"><summary>Ajustes de cálculo</summary><div id="cfg"></div></details>
+    </section>
+
+    <div class="rail">
+      <section class="card power-card" id="power">
+        <span class="eyebrow">Salida</span>
+        <div class="pw-stage">
+          <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="46" pathLength="100"/><circle class="fg" id="ringFg" cx="50" cy="50" r="46" pathLength="100"/></svg>
+          <button class="power-btn" id="powerBtn" data-cmd aria-pressed="false" aria-label="Iniciar ozonización">
+            <span class="pb-halo"></span><span class="pb-rim"></span>
+            <span class="pb-disc"><span id="pwBub"></span></span>
+            <span class="pb-ring"></span>
+            {{PWR}}
+          </button>
+        </div>
+        <div class="power-state"><i></i><span id="powerState">Apagado</span></div>
+        <div class="live"><em id="liveTime">27:00</em><span id="liveNote">duración según el área</span></div>
+      </section>
+
+      <section class="card pad-card" id="progCard">
+        <div class="head"><span class="eyebrow">Programación</span><button class="btn btn-primary" id="addBtn" style="margin-left:auto;padding:7px 13px;font-size:12.5px">+ Programar</button></div>
+        <div class="week" id="week"></div>
+        <div class="next" id="next"></div>
+        <div id="list"></div>
+      </section>
+    </div>
+  </div>
+
+  <button class="stop" id="stopBtn" data-cmd>{{STOPICON}} Paro total</button>
+  <footer class="foot"><p class="sig"><span>RPI Ingeniería</span><i></i><span>Propuesta <b>1</b></span></p></footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/*@CORE_JS@*/
+
+/* ===== Propuesta 1 ===== */
+let M = 19;                                     // píxeles por metro: se adapta para que el plano llene la caja
+bubbles($("roomBub"), 16, 150);
+bubbles($("pwBub"), 8, 100);
+const ap = areaPicker($("ap1"), { get: () => S.area, set: setArea, dim: false });
+cfgPanel($("cfg"));
+bindRows($("list"));
+
+function paintPlan(){
+  const a = S.area, w = Math.sqrt(a * 4 / 3), l = Math.sqrt(a * 3 / 4);
+  const pl = $("plan"); M = clamp(Math.min((pl.clientWidth - 76) / w, (pl.clientHeight - 74) / l), 9, 32);
+  pl.style.setProperty("--m", M.toFixed(1) + "px");
+  const r = $("room"); r.style.width = (w * M).toFixed(0) + "px"; r.style.height = (l * M).toFixed(0) + "px";
+  $("dW").textContent = w.toFixed(1) + " m"; $("dL").textContent = l.toFixed(1) + " m";
+  $("rArea").textContent = Number.isInteger(a) ? a : a.toFixed(1); $("rVol").textContent = (a * CFG.h).toFixed(0) + " m³";
+}
+let sigList = "";
+function paintProg(){
+  const hoy = new Date(), lun = addDays(hoy, -((hoy.getDay() + 6) % 7));
+  $("week").innerHTML = ORDEN.map((n, i) => {
+    const d = addDays(lun, i), has = schedOn(d).some(s => s.on && (s.days ? d >= new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) : true));
+    return `<div class="${ymd(d) === ymd(hoy) ? "hoy " : ""}${has ? "has" : ""}">${DIAS[n]}<b>${d.getDate()}</b><i></i></div>`;
+  }).join("");
+  const nx = upcoming(1)[0];
+  $("next").innerHTML = nx
+    ? `Próxima: <b>${whenTxt(nx.at)}</b> · ${esc(nx.s.label || "Sesión")} · ${fmtMin(calc(nx.s.area).min)} <span style="color:var(--muted)">(${relTxt(nx.at)})</span>`
+    : "Sin sesiones programadas.";
+  const sig = JSON.stringify(sched);
+  if (sig !== sigList){
+    sigList = sig;
+    $("list").innerHTML = sched.length ? sched.slice().sort(byTime).map(schedRowHTML).join("") : '<div class="vacio">Aún no hay programaciones.<br>Toca <b>+ Programar</b> para crear la primera.</div>';
+  }
+}
+function paint(){
+  const c = calc(S.area), run = running();
+  paintPlan(); ap.paint();
+  $("cVol").textContent = c.vol.toFixed(0) + " m³"; $("cK").textContent = CFG.k.toFixed(2);
+  $("cMin").textContent = fmtMin(c.min) + (c.capped ? " (tope)" : "");
+  $("plan").classList.toggle("live", run);
+  $("modeChip").dataset.mode = run ? "run" : "idle"; $("modeText").textContent = run ? "Ozonizando" : "En reposo";
+  const p = $("power"); p.classList.toggle("on", run);
+  $("powerBtn").setAttribute("aria-pressed", run + "");
+  $("powerBtn").setAttribute("aria-label", run ? "Detener la ozonización" : "Iniciar la ozonización");
+  $("powerState").textContent = run ? "Ozonizando" : "Apagado";
+  document.querySelector("#areaCard .bub").classList.toggle("live", run);
+  $("liveTime").textContent = mmss(run ? S.timerSec : c.sec);
+  $("liveNote").textContent = run ? "restante · termina " + HORA(new Date(Date.now() + S.timerSec * 1000)) : "duración según el área";
+  ring($("ringFg"), frac());
+  paintProg();
+}
+onChange(paint);
+$("powerBtn").addEventListener("click", () => {
+  const b = $("powerBtn"); b.classList.remove("pressed"); void b.offsetWidth; b.classList.add("pressed");
+  running() ? stopSession() : startSession(calc(S.area).sec);
+});
+$("powerBtn").addEventListener("animationend", e => { if (e.animationName === "pb-ring") $("powerBtn").classList.remove("pressed"); });
+$("stopBtn").onclick = paroTotal;
+$("addBtn").onclick = () => openEditor(null);
+paint(); paintLock(); paintAlert();
+revealAll(".card, .stop");
+</script>
+</body>
+</html>
